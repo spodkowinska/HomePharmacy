@@ -42,5 +42,11 @@ public class MedicineController {
         model.addAttribute("medicines", medicineService.findAll());
         return "redirect:/medicine-list";
     }
+    @GetMapping("/buy/{id}")
+    public String buyMedicine(@PathVariable int id, Model model){
+        medicineService.deleteById(id);
+        model.addAttribute("medicines", medicineService.findAll());
+        return "redirect:/medicine-list";
+    }
 
 }

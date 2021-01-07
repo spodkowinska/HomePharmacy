@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Medicine Data</title>
 </head>
 <body>
+<h3>Medicine Data</h3>
 <form th:action = "@{/editMedicine}" th:object = "${medicine}" method = "post">
-    <input type="text" th:field="*{id}"/>
+    <input type="hidden" th:field="*{id}"/>
     <p>Medicine name: <input type="text" th:field="*{name}"></p>
     <p>Price: <input type="text" th:field="*{price}"></p>
     <p>Quantity left: <input type="text" th:field="*{quantityLeft}"></p>
