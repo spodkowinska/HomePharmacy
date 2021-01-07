@@ -13,30 +13,24 @@
 <body>
 <table style="width:100%">
     <tr>
-        <th>Medicine name </th>
-        <th>Expiry date </th>
-        <th>Price </th>
-        <th>Quantity left </th>
+        <th>Ilness name </th>
+        <th>Starting date </th>
+        <th>Duration </th>
+        <th>Doctor </th>
         <th>Description </th>
-        <th>Is steroid </th>
-        <th>Is antibiotic </th>
-        <th>Is prescription needed </th>
         <th>Actions</th><br>
     </tr>
-    <tbody th:each="medicine: ${medicines}" >
+    <tbody th:each="sickness: ${sicknesses}" >
     <tr>
-    <td th:text="${medicine.getName()}"></td>
-    <td th:text="${medicine.getExpiryDate()}"></td>
-    <td th:text="${medicine.getPrice()}"></td>
-    <td th:text="${medicine.getQuantityLeft()}"></td>
-    <td th:text="${medicine.getDescription()}"></td>
-    <td th:text="${medicine.getIsSteroid()}"></td>
-    <td th:text="${medicine.getIsAntibiotic()}"></td>
-    <td th:text="${medicine.getIsPrescriptionNeeded()}"></td>
-        <td><a th:href="@{/edit/{id}(id=${medicine.id})}">EDIT</a> <a th:href="@{/delete/{id}(id=${medicine.id})}">DELETE</a> <a th:href="@{/buy/{id}(id=${medicine.id})}">BUY</a> </td><br>
+    <td th:text="${sickness.getName()}"></td>
+    <td th:text="${sickness.getStartingDate()}"></td>
+    <td th:text="${sickness.getDuration()}"></td>
+    <td th:text="${sickness.getDoctor()}"></td>
+    <td th:text="${sickness.getDescription()}"></td>
+        <td><a th:href="@{/sickness/edit/{id}(id=${sickness.id})}">EDIT</a> <a th:href="@{/delete/{id}(id=${sickness.id})}">DELETE</a> <a th:href="@{/buy/{id}(id=${sickness.id})}">BUY</a> </td><br>
     </tr>
     </tbody>
 </table>
-<td><a th:href="@{/addMedicine}">Add new medicine</a></td>
+<td><a th:href="@{/sickness/add}">Add new ilness</a></td>
 </body>
 </html>

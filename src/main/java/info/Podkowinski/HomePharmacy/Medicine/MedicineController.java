@@ -3,18 +3,16 @@ package info.Podkowinski.HomePharmacy.Medicine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/medicine")
 public class MedicineController {
 
     @Autowired
     private MedicineService medicineService;
 
-    @GetMapping("/addMedicine")
+    @GetMapping("/add")
     public String addMedicine(Model model){
         model.addAttribute("medicine", new Medicine());
         return "Medicine/medicine-edit";
@@ -25,13 +23,13 @@ public class MedicineController {
         model.addAttribute("medicine", medicineToEdit);
         return "Medicine/medicine-edit";
     }
-    @PostMapping("/editMedicine")
+    @PostMapping("/edit")
     public String editMedicinePost(@ModelAttribute Medicine medicine, Model model){
         medicineService.saveMedicine(medicine);
         model.addAttribute("medicines", medicineService.findAll());
-        return "redirect:/medicine-list";
+        return "redirect:/medicine/list";
     }
-    @GetMapping("/medicine-list")
+    @GetMapping("/list")
     public String medicineList(Model model){
         model.addAttribute("medicines", medicineService.findAll());
         return "Medicine/medicine-list";
@@ -40,13 +38,13 @@ public class MedicineController {
     public String deleteMedicine(@PathVariable int id, Model model){
         medicineService.deleteById(id);
         model.addAttribute("medicines", medicineService.findAll());
-        return "redirect:/medicine-list";
+        return "redirect:/medicine/list";
     }
     @GetMapping("/buy/{id}")
     public String buyMedicine(@PathVariable int id, Model model){
         medicineService.deleteById(id);
         model.addAttribute("medicines", medicineService.findAll());
-        return "redirect:/medicine-list";
+        return "redirect:/medicine/list";
     }
 
 }

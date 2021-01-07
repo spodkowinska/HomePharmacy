@@ -6,9 +6,9 @@
 </head>
 <body>
 <h3>Sickness Data</h3>
-<form th:action = "@{/editSickness}" th:object = "${sickness}" method = "post">
-    <input type="hidden" th:field="*{getId()}"/>
-    <p>Illness name: <input type="text" th:field="*{getName()}"></p>
+<form th:action = "@{/sickness/edit}" th:object = "${sickness}" method = "post">
+    <input type="hidden" th:field="*{id}"/>
+    <p>Illness name: <input type="text" th:field="*{name}"></p>
     <p>Doctor in charge: <input type="text" th:field="*{doctor}" value="true"></p>
     <p>Starting date: <input type="date" th:field="*{startingDate}"></p>
     <p>Duration: <input type="text" th:field="*{duration}"></p>
