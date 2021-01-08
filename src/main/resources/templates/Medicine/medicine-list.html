@@ -21,6 +21,7 @@
         <th>Is steroid </th>
         <th>Is antibiotic </th>
         <th>Is prescription needed </th>
+        <th>Is added to buyList </th>
         <th>Actions</th><br>
     </tr>
     <tbody th:each="medicine: ${medicines}" >
@@ -33,10 +34,11 @@
     <td th:text="${medicine.getIsSteroid()}"></td>
     <td th:text="${medicine.getIsAntibiotic()}"></td>
     <td th:text="${medicine.getIsPrescriptionNeeded()}"></td>
+        <td th:text="${medicine.getIsToBuy()}"></td>
         <td><a th:href="@{/medicine/edit/{id}(id=${medicine.id})}">EDIT</a> <a th:href="@{/medicine/delete/{id}(id=${medicine.id})}">DELETE</a> <a th:href="@{/medicine/buy/{id}(id=${medicine.id})}">BUY</a> </td><br>
     </tr>
     </tbody>
 </table>
-<td><a th:href="@{/addMedicine}">Add new medicine</a></td>
+<td><a th:href="@{/medicine/add}">Add new medicine</a></td>
 </body>
 </html>

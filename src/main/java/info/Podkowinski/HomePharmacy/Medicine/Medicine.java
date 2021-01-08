@@ -40,6 +40,8 @@ public class Medicine {
     @OneToMany
     private List<Medicine> alternatives;
 
+    private boolean isToBuy;
+
 
 
 
@@ -131,5 +133,13 @@ public class Medicine {
 
     public void setAlternatives(List<Medicine> alternatives) {
         this.alternatives = alternatives;
+    }
+
+    public boolean getIsToBuy() {
+        return isToBuy;
+    }
+
+    public void setIsToBuy(boolean toBuy) {
+        isToBuy = toBuy;
     }
 }

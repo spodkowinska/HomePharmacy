@@ -42,7 +42,9 @@ public class MedicineController {
     }
     @GetMapping("/buy/{id}")
     public String buyMedicine(@PathVariable int id, Model model){
-        medicineService.deleteById(id);
+        Medicine medicineToBuy = medicineService.findById(id);
+        medicineToBuy.setIsToBuy(true);
+        medicineService.saveMedicine(medicineToBuy);
         model.addAttribute("medicines", medicineService.findAll());
         return "redirect:/medicine/list";
     }
