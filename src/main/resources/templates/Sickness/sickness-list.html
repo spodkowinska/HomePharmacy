@@ -27,7 +27,7 @@
     <td th:text="${sickness.getDuration()}"></td>
     <td th:text="${sickness.getDoctor()}"></td>
     <td th:text="${sickness.getDescription()}"></td>
-        <td><a th:href="@{/sickness/edit/{id}(id=${sickness.id})}">EDIT</a> <a th:href="@{/delete/{id}(id=${sickness.id})}">DELETE</a> <a th:href="@{/buy/{id}(id=${sickness.id})}">BUY</a> </td><br>
+        <td><a th:href="@{/sickness/edit/{id}(id=${sickness.id})}">EDIT</a> <a th:href="@{/sickness/delete/{id}(id=${sickness.id})}">DELETE</a>  </td><br>
     </tr>
     </tbody>
 </table>
