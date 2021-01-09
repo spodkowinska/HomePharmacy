@@ -14,9 +14,9 @@
 <table style="width:100%">
     <tr>
         <th>Medicine name </th>
-        <th>Expiry date </th>
+<!--        <th>Expiry date </th>-->
         <th>Price </th>
-        <th>Quantity left </th>
+<!--        <th>Quantity left </th>-->
         <th>Description </th>
         <th>Is steroid </th>
         <th>Is antibiotic </th>
@@ -27,9 +27,9 @@
     <tbody th:each="medicine: ${medicines}" >
     <tr>
     <td th:text="${medicine.getName()}"></td>
-    <td th:text="${medicine.getExpiryDate()}"></td>
+<!--    <td th:text="${medicine.getExpiryDate()}"></td>-->
     <td th:text="${medicine.getPrice()}"></td>
-    <td th:text="${medicine.getQuantityLeft()}"></td>
+<!--    <td th:text="${medicine.getQuantityLeft()}"></td>-->
     <td th:text="${medicine.getDescription()}"></td>
     <td th:text="${medicine.getIsSteroid()}"></td>
     <td th:text="${medicine.getIsAntibiotic()}"></td>

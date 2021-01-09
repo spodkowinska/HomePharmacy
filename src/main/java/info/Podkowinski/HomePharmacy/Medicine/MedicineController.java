@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/medicine")
 public class MedicineController {
@@ -19,8 +22,11 @@ public class MedicineController {
     }
     @GetMapping("/edit/{id}")
     public String editMedicine(@PathVariable int id, Model model){
+//        List<MedicineInstance> quantitiesWithDates = new ArrayList<>();
         Medicine medicineToEdit = medicineService.findById(id);
+//        quantitiesWithDates.addAll(medicineToEdit.getQuantityWithExpiryDate());
         model.addAttribute("medicine", medicineToEdit);
+//        model.addAttribute("quantities", quantitiesWithDates);
         return "Medicine/medicine-edit";
     }
     @PostMapping("/edit")

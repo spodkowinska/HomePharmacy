@@ -123,4 +123,12 @@ public class Medicine {
     public void setIsToBuy(boolean toBuy) {
         isToBuy = toBuy;
     }
+
+    public List<MedicineInstance> getQuantityWithExpiryDate() {
+        return quantityWithExpiryDate;
+    }
+
+    public void setQuantityWithExpiryDate(List<MedicineInstance> quantityWithExpiryDate) {
+        this.quantityWithExpiryDate = quantityWithExpiryDate;
+    }
 }

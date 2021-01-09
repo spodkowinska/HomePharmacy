@@ -2,9 +2,11 @@ package info.Podkowinski.HomePharmacy.Medicine;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Date;
 
 @Entity
+@Table (name = "medicine_instances")
 public class MedicineInstance {
     @Id
     private Long id;
