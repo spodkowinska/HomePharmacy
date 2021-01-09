@@ -6,6 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "medicines")
@@ -17,13 +18,12 @@ public class Medicine {
 
     private String name;
 
-    private Date expiryDate;
-
     private Double price;
 
-    private int quantityLeft;
-
     private String description;
+
+    @OneToMany
+    private List<MedicineInstance> quantityWithExpiryDate;
 
     @ManyToMany
     private List<User> whomWasItPrescribed;
@@ -41,9 +41,6 @@ public class Medicine {
     private List<Medicine> alternatives;
 
     private boolean isToBuy;
-
-
-
 
     // getters and setters
 
@@ -63,28 +60,12 @@ public class Medicine {
         this.name = name;
     }
 
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
     public Double getPrice() {
         return price;
     }
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public int getQuantityLeft() {
-        return quantityLeft;
-    }
-
-    public void setQuantityLeft(int quantityLeft) {
-        this.quantityLeft = quantityLeft;
     }
 
     public String getDescription() {

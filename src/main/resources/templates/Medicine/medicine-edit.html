@@ -5,7 +5,7 @@
     <title>Medicine Data</title>
 </head>
 <body>
-<h3>Medicine Data</h3>
+<h3>Medicine:</h3>
 <form th:action = "@{/medicine/edit}" th:object = "${medicine}" method = "post">
     <input type="hidden" th:field="*{id}"/>
     <p>Medicine name: <input type="text" th:field="*{name}"></p>

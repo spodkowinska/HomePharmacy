@@ -10,6 +10,8 @@ public class MedicineService {
 
     @Autowired
     private MedicineRepository medicineRepository;
+    @Autowired
+    private MedicineInstanceRepository medicineInstanceRepository;
 
     public void saveMedicine(Medicine medicine){
         medicineRepository.save(medicine);
