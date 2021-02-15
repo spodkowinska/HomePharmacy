@@ -9,7 +9,7 @@
 <form th:action = "@{/medicine/edit}" th:object = "${medicine}" method = "post">
     <input type="hidden" th:field="*{id}"/>
     <p>Medicine name: <input type="text" th:field="*{name}"></p>
-    <p>Price: <input type="text" th:field="*{price}"></p>
+<!--    <p>Price: <input type="text" th:field="*{price}"></p>-->
 <!--    <p>Quantity left: <input type="text" th:field="{quantities.}"></p>-->
     <p>Is it a steroid? <input type="checkbox" th:field="*{isSteroid}" value="true"></p>
     <p>Is it an antibiotic? <input type="checkbox" th:field="*{isAntibiotic}" value="true"></p>

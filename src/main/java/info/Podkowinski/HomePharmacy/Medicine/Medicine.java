@@ -18,15 +18,13 @@ public class Medicine {
 
     private String name;
 
-    private Double price;
-
     private String description;
 
-    @OneToMany
-    private List<MedicineInstance> quantityWithExpiryDate;
-
-    @ManyToMany
-    private List<User> whomWasItPrescribed;
+//    @OneToMany
+//    private List<MedicineInstance> quantityWithExpiryDate;
+//
+//    @ManyToMany
+//    private List<User> whomWasItPrescribed;
 
     @ColumnDefault(value = "false")
     private boolean isPrescriptionNeeded;
@@ -41,6 +39,8 @@ public class Medicine {
     private List<Medicine> alternatives;
 
     private boolean isToBuy;
+
+    private Double officialPrice;
 
     // getters and setters
 
@@ -60,14 +60,6 @@ public class Medicine {
         this.name = name;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -75,14 +67,14 @@ public class Medicine {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public List<User> getWhomWasItPrescribed() {
-        return whomWasItPrescribed;
-    }
-
-    public void setWhomWasItPrescribed(List<User> whomWasItPrescribed) {
-        this.whomWasItPrescribed = whomWasItPrescribed;
-    }
+//
+//    public List<User> getWhomWasItPrescribed() {
+//        return whomWasItPrescribed;
+//    }
+//
+//    public void setWhomWasItPrescribed(List<User> whomWasItPrescribed) {
+//        this.whomWasItPrescribed = whomWasItPrescribed;
+//    }
 
     public boolean getIsPrescriptionNeeded() {
         return isPrescriptionNeeded;
@@ -124,11 +116,19 @@ public class Medicine {
         isToBuy = toBuy;
     }
 
-    public List<MedicineInstance> getQuantityWithExpiryDate() {
-        return quantityWithExpiryDate;
+//    public List<MedicineInstance> getQuantityWithExpiryDate() {
+//        return quantityWithExpiryDate;
+//    }
+//
+//    public void setQuantityWithExpiryDate(List<MedicineInstance> quantityWithExpiryDate) {
+//        this.quantityWithExpiryDate = quantityWithExpiryDate;
+//    }
+
+    public Double getOfficialPrice() {
+        return officialPrice;
     }
 
-    public void setQuantityWithExpiryDate(List<MedicineInstance> quantityWithExpiryDate) {
-        this.quantityWithExpiryDate = quantityWithExpiryDate;
+    public void setOfficialPrice(Double officialPrice) {
+        this.officialPrice = officialPrice;
     }
 }
