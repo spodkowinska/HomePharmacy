@@ -20,9 +20,6 @@ public class User {
 
     private String email;
 
-    @OneToMany
-    private List <Medicine> medicines;
-
 
 
     //getters and setters
@@ -43,13 +40,6 @@ public class User {
         this.name = name;
     }
 
-    public List<Medicine> getMedicines() {
-        return medicines;
-    }
-
-    public void setMedicines(List<Medicine> medicines) {
-        this.medicines = medicines;
-    }
 
     public String getEncodedPassword() {
         return encodedPassword;
