@@ -24,7 +24,10 @@ public class MedicineService {
     public Medicine findById(int id){
         return medicineRepository.getOne(Long.valueOf(id));
     }
+
     public void deleteById(int id){
         medicineRepository.deleteById(Long.valueOf(id));
     }
+
+    public void deleteMedicine(Medicine medicine) { medicineRepository.delete(medicine);}
 }
