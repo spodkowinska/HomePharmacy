@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Medicine Data</title>
+</head>
+<body>
+<h3>Medicine:</h3>
+<form th:action = "@{/medicine/edit}" th:object = "${medicine}" method = "post">
+    <input type="hidden" th:field="*{id}"/>
+    <p>Medicine name: <input type="text" th:field="*{name}"></p>
+<!--    <p>Price: <input type="text" th:field="*{price}"></p>-->
+<!--    <p>Quantity left: <input type="text" th:field="{quantities.}"></p>-->
+    <p>Is it a steroid? <input type="checkbox" th:field="*{isSteroid}" value="true"></p>
+    <p>Is it an antibiotic? <input type="checkbox" th:field="*{isAntibiotic}" value="true"></p>
+    <p>Is it a prescription drug? <input type="checkbox" th:field="*{isPrescriptionNeeded}" value="true"></p>
+<!--    <p>Expiry date: <input type="date" th:field="*{expiryDate}"></p>-->
+    <p>Description: <input type="text" th:field="*{description}"></p>
+    <p><input type="submit" value="Save medicine"></p>
+</form>
+</body>
+</html>

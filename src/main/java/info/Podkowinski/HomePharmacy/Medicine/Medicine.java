@@ -1,5 +1,6 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
+import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import info.Podkowinski.HomePharmacy.User.User;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -34,6 +35,9 @@ public class Medicine {
 
     @ColumnDefault(value = "false")
     private boolean isAntibiotic;
+
+    @ManyToMany(mappedBy = "medicine")
+    private List<FamilyMember> familyMember;
 
     @OneToMany
     private List<Medicine> alternatives;
