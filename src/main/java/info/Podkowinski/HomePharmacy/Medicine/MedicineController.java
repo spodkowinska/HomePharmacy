@@ -21,13 +21,13 @@ public class MedicineController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PostMapping(value="/edit")
-    public ResponseEntity editMedicinePost(@RequestBody Medicine medicine) {
+    @PutMapping(value="/edit")
+    public ResponseEntity editMedicine(@RequestBody Medicine medicine) {
         medicineService.saveMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity deleteMedicine(@RequestBody Medicine medicine) {
         medicineService.deleteMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -38,18 +38,48 @@ public class MedicineController {
         Medicine medicineToBuy = medicineService.findById(id);
         medicineToBuy.setIsToBuy(true);
         medicineService.saveMedicine(medicineToBuy);
-        model.addAttribute("medicines", medicineService.findAll());
+        model.addAttribute("medicines", medicineService.findAllMedicines());
         return "redirect:/medicine/list";
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Medicine>> read() {
-        List<Medicine> foundMedicine = medicineService.findAll();
+    public ResponseEntity<List<Medicine>> listMedicines() {
+        List<Medicine> foundMedicine = medicineService.findAllMedicines();
         if (foundMedicine == null) {
             return ResponseEntity.notFound().build();
         } else {
                 return ResponseEntity.ok(foundMedicine);
             }
+    }
+
+    //MedicineInstance mappings
+
+    @PostMapping("/addInstance")
+    public ResponseEntity addMedicine(@RequestBody MedicineInstance medicineInstance) {
+        medicineService.saveMedicineInstance(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @PutMapping(value="/editInstance")
+    public ResponseEntity editMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
+        medicineService.saveMedicineInstance(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteInstance")
+    public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
+        medicineService.deleteMedicineInstance(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/listInstances")
+    public ResponseEntity<List<MedicineInstance>> listInstances() {
+        List<MedicineInstance> foundMedicineInstances = medicineService.findAllMedicineInstances();
+        if (foundMedicineInstances == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(foundMedicineInstances);
+        }
     }
 
 }
