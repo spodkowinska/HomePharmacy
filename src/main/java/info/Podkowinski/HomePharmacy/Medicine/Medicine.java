@@ -46,6 +46,9 @@ public class Medicine {
 
     private Double officialPrice;
 
+    @ManyToOne
+    private User user;
+
     // getters and setters
 
     public Long getId() {
