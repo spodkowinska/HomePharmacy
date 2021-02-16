@@ -3,7 +3,6 @@ package info.Podkowinski.HomePharmacy.Medicine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,15 +32,6 @@ public class MedicineController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/buy/{id}")
-    public String buyMedicine(@PathVariable int id, Model model) {
-        Medicine medicineToBuy = medicineService.findById(id);
-        medicineToBuy.setIsToBuy(true);
-        medicineService.saveMedicine(medicineToBuy);
-        model.addAttribute("medicines", medicineService.findAllMedicines());
-        return "redirect:/medicine/list";
-    }
-
     @GetMapping("/list")
     public ResponseEntity<List<Medicine>> listMedicines() {
         List<Medicine> foundMedicine = medicineService.findAllMedicines();
@@ -55,15 +45,15 @@ public class MedicineController {
     //MedicineInstance mappings
 
     @PostMapping("/addInstance")
-    public ResponseEntity addMedicine(@RequestBody MedicineInstance medicineInstance) {
+    public ResponseEntity addMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
         medicineService.saveMedicineInstance(medicineInstance);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(medicineInstance);
     }
 
-    @PutMapping(value="/editInstance")
+    @PostMapping("/editInstance")
     public ResponseEntity editMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
         medicineService.saveMedicineInstance(medicineInstance);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return ResponseEntity.ok(medicineInstance);
     }
 
     @DeleteMapping("/deleteInstance")
@@ -79,6 +69,25 @@ public class MedicineController {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(foundMedicineInstances);
+        }
+    }
+
+    //wishlist mapping
+
+
+    @PostMapping("/addToWishlist")
+    public ResponseEntity addToWishList(@RequestBody Medicine medicine) {
+        medicineService.addToWishList(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/showWishlist")
+    public ResponseEntity<List<Medicine>> showWishlist() {
+        List<Medicine> wishlist = medicineService.showWishList();
+        if (wishlist == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(wishlist);
         }
     }
 

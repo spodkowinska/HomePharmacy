@@ -5,14 +5,20 @@ import info.Podkowinski.HomePharmacy.User.User;
 import javax.persistence.*;
 import java.sql.Date;
 
+
+
 @Entity
 @Table (name = "medicine_instances")
 public class MedicineInstance {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     private Medicine medicine;
+
+    private Long medicine_id2;
 
     private Integer quantityLeft;
 
@@ -53,6 +59,7 @@ public class MedicineInstance {
         this.medicine = medicine;
     }
 
+
     public Integer getQuantityLeft() {
         return quantityLeft;
     }
@@ -91,5 +98,13 @@ public class MedicineInstance {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getMedicine_id2() {
+        return medicine_id2;
+    }
+
+    public void setMedicine_id2(Long medicine_id2) {
+        this.medicine_id2 = medicine_id2;
     }
 }

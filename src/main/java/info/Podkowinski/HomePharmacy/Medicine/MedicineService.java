@@ -35,7 +35,10 @@ public class MedicineService {
     //MedicineInstance service
 
     public void saveMedicineInstance(MedicineInstance medicineInstance){
-        medicineInstanceRepository.save(medicineInstance);
+        if (medicineRepository.findById(medicineInstance.getMedicine_id2()).isPresent()) {
+            medicineInstance.setMedicine(medicineRepository.findById(medicineInstance.getMedicine_id2()).orElse(null));
+            medicineInstanceRepository.save(medicineInstance);
+        }
     }
 
     public List<MedicineInstance> findAllMedicineInstances(){
@@ -52,6 +55,25 @@ public class MedicineService {
 
     public void deleteMedicineInstance(MedicineInstance medicineInstance) {
         medicineInstanceRepository.delete(medicineInstance);}
+
+
+    // Wishlist service
+
+    public List<Medicine> showWishList() {
+        List<Medicine> allMedicine = medicineRepository.findAll();
+        List<Medicine> wishlist = null;
+        for ( Medicine medicine : allMedicine) {
+            if (medicine.getIsToBuy()) {
+                 wishlist.add(medicine);
+            }
+        }
+            return wishlist;
+    }
+
+    public void addToWishList(Medicine medicine) {
+       medicine.setIsToBuy(true);
+       medicineRepository.save(medicine);
+    }
 
 
 }
