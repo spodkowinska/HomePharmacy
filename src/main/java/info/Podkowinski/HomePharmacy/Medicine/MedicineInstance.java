@@ -16,9 +16,10 @@ public class MedicineInstance {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "medicine_id", insertable = false, updatable = false)
     private Medicine medicine;
 
-    private Long medicine_id2;
+    private Long medicine_id;
 
     private Integer quantityLeft;
 
@@ -100,11 +101,11 @@ public class MedicineInstance {
         this.price = price;
     }
 
-    public Long getMedicine_id2() {
-        return medicine_id2;
+    public Long getMedicine_id() {
+        return medicine_id;
     }
 
     public void setMedicine_id2(Long medicine_id2) {
-        this.medicine_id2 = medicine_id2;
+        this.medicine_id = medicine_id;
     }
 }

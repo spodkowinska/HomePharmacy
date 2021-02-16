@@ -50,7 +50,7 @@ public class MedicineController {
         return ResponseEntity.ok(medicineInstance);
     }
 
-    @PostMapping("/editInstance")
+    @PutMapping("/editInstance")
     public ResponseEntity editMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
         medicineService.saveMedicineInstance(medicineInstance);
         return ResponseEntity.ok(medicineInstance);
@@ -74,8 +74,7 @@ public class MedicineController {
 
     //wishlist mapping
 
-
-    @PostMapping("/addToWishlist")
+    @PatchMapping("/addToWishlist")
     public ResponseEntity addToWishList(@RequestBody Medicine medicine) {
         medicineService.addToWishList(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -89,6 +88,12 @@ public class MedicineController {
         } else {
             return ResponseEntity.ok(wishlist);
         }
+    }
+
+    @PatchMapping("/removeFromWishlist")
+    public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine) {
+        medicineService.removeFromWishlist(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }
