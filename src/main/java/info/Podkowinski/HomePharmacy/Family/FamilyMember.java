@@ -19,23 +19,35 @@ public class FamilyMember {
     private String surname;
     private int age;
 
-    public long getMedicine_id() {
-        return medicine_id;
+//    public long getMedicine_id() {
+//        return medicine_id;
+//    }
+//
+//    public void setMedicine_id(long medicine_id) {
+//        this.medicine_id = medicine_id;
+//    }
+//
+//    private long medicine_id;
+//
+//    @ManyToMany
+//    @JoinTable(
+//            name = "family_member_medicines",
+//            joinColumns = @JoinColumn(name = "family_member_id"),
+//            inverseJoinColumns = @JoinColumn(name = "medicine_id")
+//    )
+//    private List<Medicine> medicine;
+
+    public List<Medicine> getMedicines() {
+        return medicines;
     }
 
-    public void setMedicine_id(long medicine_id) {
-        this.medicine_id = medicine_id;
+    public void setMedicines(List<Medicine> medicines) {
+        this.medicines = medicines;
     }
 
-    private long medicine_id;
-
-    @ManyToMany
-    @JoinTable(
-            name = "family_member_medicines",
-            joinColumns = @JoinColumn(name = "family_member_id"),
-            inverseJoinColumns = @JoinColumn(name = "medicine_id")
-    )
-    private List<Medicine> medicine;
+    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @JoinColumn(name = "medicine_id")
+    private List<Medicine> medicines;
 
     public Long getId() { return id; }
 

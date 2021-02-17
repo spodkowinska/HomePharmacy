@@ -36,8 +36,8 @@ public class Medicine {
     @ColumnDefault(value = "false")
     private boolean isAntibiotic;
 
-    @ManyToMany(mappedBy = "medicine")
-    private List<FamilyMember> familyMember;
+//    @ManyToMany(mappedBy = "medicine")
+//    private List<FamilyMember> familyMember;
 
     @OneToMany
     private List<Medicine> alternatives;
