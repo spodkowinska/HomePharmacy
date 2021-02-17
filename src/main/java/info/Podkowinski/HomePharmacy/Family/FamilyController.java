@@ -30,8 +30,10 @@ public class FamilyController {
         newFamilyMember.setSurname(creatingFamilyMemberDTO.getSurname());
         newFamilyMember.setAge(creatingFamilyMemberDTO.getAge());
 
-        List<Integer> medicineIds = creatingFamilyMemberDTO.getMedicineIds();
-        newFamilyMember.setMedicines(medicineService.familyMemberMedicinesList(medicineIds));
+        if (creatingFamilyMemberDTO.getMedicineIds() != null) {
+            List<Integer> medicineIds = creatingFamilyMemberDTO.getMedicineIds();
+            newFamilyMember.setMedicines(medicineService.familyMemberMedicinesList(medicineIds));
+        }
 
         familyService.saveFamilyMember(newFamilyMember);
         return "redirect:/family";
@@ -48,10 +50,10 @@ public class FamilyController {
         editedFamilyMember.setSurname(editFamilyMemberDTO.getSurname());
         editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
 
-        List<Integer> medicineIds = editFamilyMemberDTO.getMedicineIds();
-
-        editedFamilyMember.setMedicines(medicineService.familyMemberMedicinesList(medicineIds));
-
+        if (editFamilyMemberDTO.getMedicineIds() != null) {
+            List<Integer> medicineIds = editFamilyMemberDTO.getMedicineIds();
+            editedFamilyMember.setMedicines(medicineService.familyMemberMedicinesList(medicineIds));
+        }
 
         familyService.saveFamilyMember(editedFamilyMember);
         return "redirect:/family";
