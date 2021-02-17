@@ -109,13 +109,13 @@ public class Medicine {
         isAntibiotic = antibiotic;
     }
 
-    public List<Medicine> getAlternatives() {
-        return alternatives;
-    }
-
-    public void setAlternatives(List<Medicine> alternatives) {
-        this.alternatives = alternatives;
-    }
+//    public List<Medicine> getAlternatives() {
+//        return alternatives;
+//    }
+//
+//    public void setAlternatives(List<Medicine> alternatives) {
+//        this.alternatives = alternatives;
+//    }
 
     public boolean getIsToBuy() {
         return isToBuy;

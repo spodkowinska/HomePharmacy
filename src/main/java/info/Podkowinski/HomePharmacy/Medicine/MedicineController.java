@@ -1,55 +1,127 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/medicine")
 public class MedicineController {
 
     @Autowired
     private MedicineService medicineService;
 
-    @GetMapping("/add")
-    public String addMedicine(Model model){
-        model.addAttribute("medicine", new Medicine());
-        return "Medicine/medicine-edit";
+    @PostMapping("/add")
+    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
+        Medicine medicine = new Medicine();
+        return saveMedicine(addMedicineDTO, medicine);
     }
-    @GetMapping("/edit/{id}")
-    public String editMedicine(@PathVariable int id, Model model){
-        Medicine medicineToEdit = medicineService.findById(id);
-        model.addAttribute("medicine", medicineToEdit);
-        return "Medicine/medicine-edit";
+
+    @PatchMapping(value="/edit")
+    public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
+        Medicine medicine = medicineService.findById(addMedicineDTO.getId());
+        return saveMedicine(addMedicineDTO, medicine);
     }
-    @PostMapping("/edit")
-    public String editMedicinePost(@ModelAttribute Medicine medicine, Model model){
-        medicineService.saveMedicine(medicine);
-        model.addAttribute("medicines", medicineService.findAll());
-        return "redirect:/medicine/list";
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine) {
+        medicineService.deleteMedicine(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
+
     @GetMapping("/list")
-    public String medicineList(Model model){
-        model.addAttribute("medicines", medicineService.findAll());
-        return "Medicine/medicine-list";
+    public ResponseEntity<List<Medicine>> listMedicines() {
+        List<Medicine> foundMedicine = medicineService.findAllMedicines();
+        if (foundMedicine == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+                return ResponseEntity.ok(foundMedicine);
+            }
     }
-    @GetMapping("/delete/{id}")
-    public String deleteMedicine(@PathVariable int id, Model model){
-        medicineService.deleteById(id);
-        model.addAttribute("medicines", medicineService.findAll());
-        return "redirect:/medicine/list";
+
+    public ResponseEntity saveMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
+        medicine.setName(addMedicineDTO.getName());
+        medicine.setIsToBuy(addMedicineDTO.isToBuy());
+        medicine.setIsPrescriptionNeeded(addMedicineDTO.isPrescriptionNeeded());
+        medicine.setIsAntibiotic(addMedicineDTO.isSteroid());
+        medicine.setDescription(addMedicineDTO.getDescription());
+        medicine.setIsSteroid(addMedicineDTO.isSteroid());
+        medicine.setIsVitamin(addMedicineDTO.isVitamin());
+        medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+
+        medicineService.saveMedicine(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
-    @GetMapping("/buy/{id}")
-    public String buyMedicine(@PathVariable int id, Model model){
-        Medicine medicineToBuy = medicineService.findById(id);
-        medicineToBuy.setIsToBuy(true);
-        medicineService.saveMedicine(medicineToBuy);
-        model.addAttribute("medicines", medicineService.findAll());
-        return "redirect:/medicine/list";
+
+    //MedicineInstance mappings
+
+    @PostMapping("/addInstance")
+    public ResponseEntity addMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO) {
+        MedicineInstance medicineInstance = new MedicineInstance();
+        return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+    }
+
+    @PutMapping("/editInstance")
+    public ResponseEntity editMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO) {
+        MedicineInstance medicineInstance = medicineService.findMedicineInstanceById(addMedicineInstanceDTO.getId());
+        return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+    }
+
+    @DeleteMapping("/deleteInstance")
+    public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
+        medicineService.deleteMedicineInstance(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/listInstances")
+    public ResponseEntity<List<MedicineInstance>> listInstances() {
+        List<MedicineInstance> foundMedicineInstances = medicineService.findAllMedicineInstances();
+        if (foundMedicineInstances == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(foundMedicineInstances);
+        }
+    }
+
+    public ResponseEntity saveMedicineInstance(AddMedicineInstanceDTO addMedicineInstanceDTO, MedicineInstance medicineInstance) {
+        medicineInstance.setMedicine(addMedicineInstanceDTO.getMedicine());
+        medicineInstance.setQuantityLeft(addMedicineInstanceDTO.getQuantityLeft());
+        medicineInstance.setQuantityPerPackage(addMedicineInstanceDTO.getQuantityPerPackage());
+        medicineInstance.setDateOfPurchase(addMedicineInstanceDTO.getDateOfPurchase());
+        medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
+        medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
+        medicineInstance.setMedicine_id(addMedicineInstanceDTO.getMedicine_id());
+
+        medicineService.saveMedicineInstance(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    //wishlist mapping
+
+    @PatchMapping("/addToWishlist")
+    public ResponseEntity addToWishList(@RequestBody Medicine medicine) {
+        medicineService.addToWishList(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/showWishlist")
+    public ResponseEntity<List<Medicine>> showWishlist() {
+        List<Medicine> wishlist = medicineService.showWishList();
+        if (wishlist == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(wishlist);
+        }
+    }
+
+    @PatchMapping("/removeFromWishlist")
+    public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine) {
+        medicineService.removeFromWishlist(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 }
