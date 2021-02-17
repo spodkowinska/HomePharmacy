@@ -8,3 +8,7 @@
 /httpRequests/
 
 application.properties
+
+../target
+
+../.idea
