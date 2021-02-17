@@ -87,5 +87,15 @@ public class MedicineService {
         }
     }
 
+  //Family Member service
+    public List<Medicine> familyMemberMedicinesList(List<Integer> medicineIds) {
+        List<Medicine> medicineList = new ArrayList<Medicine>();
+
+        for (int i = 0; i < medicineIds.size(); i++) {
+            medicineList.add(findById(medicineIds.get(i)));
+        }
+
+        return medicineList;
+    }
 
 }

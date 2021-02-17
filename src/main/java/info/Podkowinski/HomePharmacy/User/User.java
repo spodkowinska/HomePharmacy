@@ -16,13 +16,13 @@ public class User {
 
     private String name;
 
-    @ManyToMany
-    @JoinColumn(name = "sickness_id")
-    private List<Sickness> sicknesses;
+    private String encodedPassword;
 
-    @ManyToMany
-    @JoinColumn(name = "medicine_id")
-    private List<Medicine> medicines;
+    private String email;
+
+
+
+    //getters and setters
 
     public Long getId() {
         return id;
@@ -40,19 +40,20 @@ public class User {
         this.name = name;
     }
 
-    public List<Sickness> getSicknesses() {
-        return sicknesses;
+
+    public String getEncodedPassword() {
+        return encodedPassword;
     }
 
-    public void setSicknesses(List<Sickness> sicknesses) {
-        this.sicknesses = sicknesses;
+    public void setEncodedPassword(String encodedPassword) {
+        this.encodedPassword = encodedPassword;
     }
 
-    public List<Medicine> getMedicines() {
-        return medicines;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMedicines(List<Medicine> medicines) {
-        this.medicines = medicines;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
