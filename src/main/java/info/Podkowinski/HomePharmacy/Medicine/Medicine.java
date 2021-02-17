@@ -1,5 +1,6 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
+import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import info.Podkowinski.HomePharmacy.User.User;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -38,6 +39,7 @@ public class Medicine {
 
     @ColumnDefault(value = "false")
     private boolean isVitamin;
+
 
     @OneToMany
     private List<Medicine> alternatives;
