@@ -105,7 +105,7 @@ public class MedicineInstance {
         return medicine_id;
     }
 
-    public void setMedicine_id2(Long medicine_id2) {
+    public void setMedicine_id(Long medicine_id) {
         this.medicine_id = medicine_id;
     }
 }
