@@ -36,8 +36,10 @@ public class Medicine {
     @ColumnDefault(value = "false")
     private boolean isAntibiotic;
 
-//    @ManyToMany(mappedBy = "medicine")
-//    private List<FamilyMember> familyMember;
+
+    @ColumnDefault(value = "false")
+    private boolean isVitamin;
+
 
     @OneToMany
     private List<Medicine> alternatives;
@@ -45,6 +47,9 @@ public class Medicine {
     private boolean isToBuy;
 
     private Double officialPrice;
+
+    @ManyToOne
+    private User user;
 
     // getters and setters
 
@@ -120,13 +125,13 @@ public class Medicine {
         isToBuy = toBuy;
     }
 
-//    public List<MedicineInstance> getQuantityWithExpiryDate() {
-//        return quantityWithExpiryDate;
-//    }
-//
-//    public void setQuantityWithExpiryDate(List<MedicineInstance> quantityWithExpiryDate) {
-//        this.quantityWithExpiryDate = quantityWithExpiryDate;
-//    }
+    public boolean getIsVitamin() {
+        return isVitamin;
+    }
+
+    public void setIsVitamin(boolean vitamin) {
+        isVitamin = vitamin;
+    }
 
     public Double getOfficialPrice() {
         return officialPrice;

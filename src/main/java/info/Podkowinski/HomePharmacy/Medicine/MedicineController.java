@@ -22,11 +22,8 @@ public class MedicineController {
     }
     @GetMapping("/edit/{id}")
     public String editMedicine(@PathVariable int id, Model model){
-//        List<MedicineInstance> quantitiesWithDates = new ArrayList<>();
         Medicine medicineToEdit = medicineService.findById(id);
-//        quantitiesWithDates.addAll(medicineToEdit.getQuantityWithExpiryDate());
         model.addAttribute("medicine", medicineToEdit);
-//        model.addAttribute("quantities", quantitiesWithDates);
         return "Medicine/medicine-edit";
     }
     @PostMapping("/edit")
