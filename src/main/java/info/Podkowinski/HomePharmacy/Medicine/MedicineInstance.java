@@ -1,10 +1,9 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
-import info.Podkowinski.HomePharmacy.User.User;
+import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 
 import javax.persistence.*;
 import java.sql.Date;
-
 
 
 @Entity
@@ -23,12 +22,8 @@ public class MedicineInstance {
 
     private Integer quantityLeft;
 
-    private Integer quantityPerPackage;
-
-    private Date dateOfPurchase;
-
     @ManyToOne
-    private User whomWasItPrescribed;
+    private FamilyMember whomWasItPrescribed;
 
     private Date expiryDate;
 
@@ -69,27 +64,11 @@ public class MedicineInstance {
         this.quantityLeft = quantityLeft;
     }
 
-    public Integer getQuantityPerPackage() {
-        return quantityPerPackage;
-    }
-
-    public void setQuantityPerPackage(Integer quantityPerPackage) {
-        this.quantityPerPackage = quantityPerPackage;
-    }
-
-    public Date getDateOfPurchase() {
-        return dateOfPurchase;
-    }
-
-    public void setDateOfPurchase(Date dateOfPurchase) {
-        this.dateOfPurchase = dateOfPurchase;
-    }
-
-    public User getWhomWasItPrescribed() {
+    public FamilyMember getWhomWasItPrescribed() {
         return whomWasItPrescribed;
     }
 
-    public void setWhomWasItPrescribed(User whomWasItPrescribed) {
+    public void setWhomWasItPrescribed(FamilyMember whomWasItPrescribed) {
         this.whomWasItPrescribed = whomWasItPrescribed;
     }
 

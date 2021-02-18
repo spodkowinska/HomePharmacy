@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @RestController
 @RequestMapping("/medicine")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MedicineController {
 
     @Autowired
@@ -90,8 +90,6 @@ public class MedicineController {
     public ResponseEntity saveMedicineInstance(AddMedicineInstanceDTO addMedicineInstanceDTO, MedicineInstance medicineInstance) {
         medicineInstance.setMedicine(addMedicineInstanceDTO.getMedicine());
         medicineInstance.setQuantityLeft(addMedicineInstanceDTO.getQuantityLeft());
-        medicineInstance.setQuantityPerPackage(addMedicineInstanceDTO.getQuantityPerPackage());
-        medicineInstance.setDateOfPurchase(addMedicineInstanceDTO.getDateOfPurchase());
         medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
         medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
         medicineInstance.setMedicine_id(addMedicineInstanceDTO.getMedicine_id());
