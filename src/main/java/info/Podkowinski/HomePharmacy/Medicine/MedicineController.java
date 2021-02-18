@@ -87,7 +87,7 @@ public class MedicineController {
         }
     }
 
-    //lists last 10 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
+    //lists last 15 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
     @GetMapping("/listLastInstances")
     public ResponseEntity<List<MedicineInstance>> listLastInstances() {
         List<MedicineInstance> foundMedicineInstances = medicineService.findLastMedicineInstances();
