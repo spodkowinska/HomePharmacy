@@ -87,6 +87,17 @@ public class MedicineController {
         }
     }
 
+    //lists last 10 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
+    @GetMapping("/listLastInstances")
+    public ResponseEntity<List<MedicineInstance>> listLastInstances() {
+        List<MedicineInstance> foundMedicineInstances = medicineService.findLastMedicineInstances();
+        if (foundMedicineInstances == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(foundMedicineInstances);
+        }
+    }
+
     public ResponseEntity saveMedicineInstance(AddMedicineInstanceDTO addMedicineInstanceDTO, MedicineInstance medicineInstance) {
         medicineInstance.setMedicine(addMedicineInstanceDTO.getMedicine());
         medicineInstance.setQuantityLeft(addMedicineInstanceDTO.getQuantityLeft());
@@ -105,6 +116,7 @@ public class MedicineController {
         medicineService.addToWishList(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
 
     @GetMapping("/showWishlist")
     public ResponseEntity<List<Medicine>> showWishlist() {
