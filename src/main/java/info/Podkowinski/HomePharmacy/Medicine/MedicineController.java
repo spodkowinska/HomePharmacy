@@ -1,5 +1,6 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
+import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,9 @@ public class MedicineController {
 
     @Autowired
     private MedicineService medicineService;
+
+    @Autowired
+    private ActiveMedicinesService activeMedicinesService;
 
     @PostMapping("/add")
     public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
@@ -120,6 +124,24 @@ public class MedicineController {
     public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine) {
         medicineService.removeFromWishlist(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    // family members medicines
+
+    @PostMapping("/addActiveMedicine")
+    public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO) {
+        ActiveMedicines activeMedicine = new ActiveMedicines();
+
+        activeMedicine.setFamilyMember(activeMedicinesSer
+                vice.findById(addActiveMedicineDTO.getFamilyMemberId()));
+        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId()));
+        activeMedicine.setActive(addActiveMedicineDTO.isActive());
+        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay());
+        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften());
+
+        activeMedicinesService.addActiveMedicine(activeMedicine);
+
+        return ResponseEntity.ok("New active medicine saved successfully!");
     }
 
 }
