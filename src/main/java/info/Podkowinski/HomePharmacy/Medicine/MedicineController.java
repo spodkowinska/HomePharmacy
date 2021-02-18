@@ -77,6 +77,12 @@ public class MedicineController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @DeleteMapping("/deleteAllInstances")
+    public ResponseEntity deleteAllInstances(@RequestBody Medicine medicine) {
+        medicineService.deleteAllMedicineInstances(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     @GetMapping("/listInstances")
     public ResponseEntity<List<MedicineInstance>> listInstances() {
         List<MedicineInstance> foundMedicineInstances = medicineService.findAllMedicineInstances();

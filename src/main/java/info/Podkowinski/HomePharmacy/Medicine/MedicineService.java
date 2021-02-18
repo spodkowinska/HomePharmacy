@@ -71,7 +71,7 @@ public class MedicineService {
     }
 
     public MedicineInstance findMedicineInstanceById(int id){
-        return medicineInstanceRepository.getOne(Long.valueOf(id));
+        return medicineInstanceRepository.getOne((long) id);
     }
 
     public void deleteMedicineInstanceById(int id){
@@ -80,6 +80,15 @@ public class MedicineService {
 
     public void deleteMedicineInstance(MedicineInstance medicineInstance) {
         medicineInstanceRepository.delete(medicineInstance);}
+
+    public void deleteAllMedicineInstances(Medicine medicine) {
+        List<MedicineInstance> allInstances = medicineInstanceRepository.findAll();
+        for (MedicineInstance instance : allInstances) {
+            if (instance.getMedicine().getId().equals(medicine.getId())) {
+                medicineInstanceRepository.deleteById(instance.getId());
+            }
+        }
+    }
 
 
     // Wishlist service

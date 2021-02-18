@@ -1,6 +1,8 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -15,6 +17,7 @@ public class MedicineInstance {
     private Long id;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "medicine_id", insertable = false, updatable = false)
     private Medicine medicine;
 
