@@ -14,6 +14,7 @@ import java.util.Map;
 public class Medicine {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

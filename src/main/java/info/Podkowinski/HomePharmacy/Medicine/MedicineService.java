@@ -36,10 +36,8 @@ public class MedicineService {
     //MedicineInstance service
 
     public void saveMedicineInstance(MedicineInstance medicineInstance){
-        if (medicineRepository.findById(medicineInstance.getMedicine_id()).isPresent()) {
-            medicineInstance.setMedicine(medicineRepository.findById(medicineInstance.getMedicine_id()).orElse(null));
-            medicineInstanceRepository.save(medicineInstance);
-        }
+        medicineInstanceRepository.save(medicineInstance);
+
     }
 
     public List<MedicineInstance> findAllMedicineInstances(){

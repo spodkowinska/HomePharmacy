@@ -92,11 +92,10 @@ public class MedicineController {
     }
 
     public ResponseEntity saveMedicineInstance(AddMedicineInstanceDTO addMedicineInstanceDTO, MedicineInstance medicineInstance) {
-        medicineInstance.setMedicine(addMedicineInstanceDTO.getMedicine());
+        medicineInstance.setMedicine(medicineService.findById(Math.toIntExact(addMedicineInstanceDTO.getMedicine_id())));
         medicineInstance.setQuantityLeft(addMedicineInstanceDTO.getQuantityLeft());
         medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
         medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
-        medicineInstance.setMedicine_id(addMedicineInstanceDTO.getMedicine_id());
 
         medicineService.saveMedicineInstance(medicineInstance);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -132,14 +131,15 @@ public class MedicineController {
     public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO) {
         ActiveMedicines activeMedicine = new ActiveMedicines();
 
-        activeMedicine.setFamilyMember(activeMedicinesSer
-                vice.findById(addActiveMedicineDTO.getFamilyMemberId()));
+        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId()));
         activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId()));
         activeMedicine.setActive(addActiveMedicineDTO.isActive());
         activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay());
         activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften());
 
         activeMedicinesService.addActiveMedicine(activeMedicine);
+
+        System.out.println("hello");
 
         return ResponseEntity.ok("New active medicine saved successfully!");
     }

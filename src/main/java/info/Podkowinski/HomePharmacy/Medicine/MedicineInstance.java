@@ -11,14 +11,13 @@ import java.sql.Date;
 public class MedicineInstance {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_id", insertable = false, updatable = false)
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicine;
-
-    private Long medicine_id;
 
     private Integer quantityLeft;
 
@@ -80,11 +79,11 @@ public class MedicineInstance {
         this.price = price;
     }
 
-    public Long getMedicine_id() {
-        return medicine_id;
-    }
-
-    public void setMedicine_id(Long medicine_id) {
-        this.medicine_id = medicine_id;
-    }
+//    public Long getMedicine_id() {
+//        return medicine_id;
+//    }
+//
+//    public void setMedicine_id(Long medicine_id) {
+//        this.medicine_id = medicine_id;
+//    }
 }

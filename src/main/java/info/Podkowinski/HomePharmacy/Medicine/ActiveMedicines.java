@@ -12,17 +12,14 @@ public class ActiveMedicines {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_instance_id", insertable = false, updatable = false)
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "medicine_instance_id", referencedColumnName = "id")
     private MedicineInstance medicineInstance;
 
-//    private Long medicine_instance_id;
 
-    @ManyToOne
-    @JoinColumn(name = "family_member_id", insertable = false, updatable = false)
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "family_member_id", referencedColumnName = "id")
     private FamilyMember familyMember;
-
-//    private Long family_member_id;
 
     private boolean isActive;
 
@@ -54,14 +51,6 @@ public class ActiveMedicines {
     public void setFamilyMember(FamilyMember familyMember) {
         this.familyMember = familyMember;
     }
-
-//    public Long getMedicine_instance_id() {
-//        return medicine_instance_id;
-//    }
-//
-//    public void setMedicine_instance_id(Long medicine_instance_id) {
-//        this.medicine_instance_id = medicine_instance_id;
-//    }
 
     public boolean isActive() {
         return isActive;

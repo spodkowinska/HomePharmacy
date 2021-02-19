@@ -7,8 +7,6 @@ public class AddMedicineInstanceDTO {
 
     private int id;
 
-    private Medicine medicine;
-
     private Long medicine_id;
 
     private Integer quantityLeft;
@@ -17,9 +15,8 @@ public class AddMedicineInstanceDTO {
 
     private Double price;
 
-    public AddMedicineInstanceDTO(int id, Medicine medicine, Long medicine_id, Integer quantityLeft, Date expiryDate, Double price) {
+    public AddMedicineInstanceDTO(int id, Long medicine_id, Integer quantityLeft, Date expiryDate, Double price) {
         this.id = id;
-        this.medicine = medicine;
         this.medicine_id = medicine_id;
         this.quantityLeft = quantityLeft;
         this.expiryDate = expiryDate;
@@ -47,15 +44,6 @@ public class AddMedicineInstanceDTO {
         this.expiryDate = expiryDate;
     }
 
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
-    }
-
-
     public Integer getQuantityLeft() {
         return quantityLeft;
     }
@@ -63,7 +51,6 @@ public class AddMedicineInstanceDTO {
     public void setQuantityLeft(Integer quantityLeft) {
         this.quantityLeft = quantityLeft;
     }
-
 
     public Double getPrice() {
         return price;
@@ -77,4 +64,7 @@ public class AddMedicineInstanceDTO {
         return medicine_id;
     }
 
+    public void setMedicine_id(Long medicine_id) {
+        this.medicine_id = medicine_id;
+    }
 }
