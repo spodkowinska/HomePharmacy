@@ -98,8 +98,9 @@ public class Medicine {
         return isToBuy;
     }
 
-    public void setIsToBuy(boolean isToBuy) {
-        isToBuy = isToBuy;
+    public void setIsToBuy(boolean toBuy) {
+        isToBuy = toBuy;
+
     }
 
     public boolean getIsVitamin() {
