@@ -92,8 +92,6 @@ public class MedicineController {
                 medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
             }
         }
-
-
         medicineService.saveMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -109,7 +107,7 @@ public class MedicineController {
     @PatchMapping("/editInstance")
     public ResponseEntity editMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO) {
         MedicineInstance medicineInstance = medicineService.findMedicineInstanceById(addMedicineInstanceDTO.getId());
-        return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+        return editMedicineInstance(addMedicineInstanceDTO, medicineInstance);
     }
 
     @DeleteMapping("/deleteInstance")
@@ -157,6 +155,27 @@ public class MedicineController {
         medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
         medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
         medicineInstance.setVisible(addMedicineInstanceDTO.getVisible());
+
+        medicineService.saveMedicineInstance(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    public ResponseEntity editMedicineInstance(AddMedicineInstanceDTO addMedicineInstanceDTO, MedicineInstance medicineInstance) {
+        if (addMedicineInstanceDTO.getMedicine_id()!=null) {
+            medicineInstance.setMedicine(medicineService.findById(Math.toIntExact(addMedicineInstanceDTO.getMedicine_id())));
+        }
+        if (addMedicineInstanceDTO.getQuantityLeft()!=null){
+            medicineInstance.setQuantityLeft(addMedicineInstanceDTO.getQuantityLeft());
+        }
+        if (addMedicineInstanceDTO.getExpiryDate()!=null){
+            medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
+        }
+        if (addMedicineInstanceDTO.getPrice()!=null) {
+            medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
+        }
+        if (addMedicineInstanceDTO.getVisible() != medicineInstance.getVisible()) {
+            medicineInstance.setVisible(addMedicineInstanceDTO.getVisible());
+        }
 
         medicineService.saveMedicineInstance(medicineInstance);
         return ResponseEntity.ok(HttpStatus.OK);

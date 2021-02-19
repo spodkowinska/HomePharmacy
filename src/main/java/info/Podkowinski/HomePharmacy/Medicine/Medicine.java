@@ -74,16 +74,16 @@ public class Medicine {
         return isSteroid;
     }
 
-    public void setIsSteroid(boolean isSteroid) {
-        isSteroid = isSteroid;
+    public void setIsSteroid(boolean steroid) {
+        isSteroid = steroid;
     }
 
     public boolean getIsAntibiotic() {
         return isAntibiotic;
     }
 
-    public void setIsAntibiotic(boolean isAntibiotic) {
-        isAntibiotic = isAntibiotic;
+    public void setIsAntibiotic(boolean antibiotic) {
+        isAntibiotic = antibiotic;
     }
 
 //    public List<Medicine> getAlternatives() {
@@ -100,7 +100,6 @@ public class Medicine {
 
     public void setIsToBuy(boolean toBuy) {
         isToBuy = toBuy;
-
     }
 
     public boolean getIsVitamin() {
