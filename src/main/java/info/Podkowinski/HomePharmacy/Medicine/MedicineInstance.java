@@ -1,7 +1,8 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
-
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -11,14 +12,15 @@ import java.sql.Date;
 public class MedicineInstance {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_id", insertable = false, updatable = false)
-    private Medicine medicine;
 
-    private Long medicine_id;
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
+    private Medicine medicine;
 
     private Integer quantityLeft;
 
@@ -28,6 +30,9 @@ public class MedicineInstance {
     private Date expiryDate;
 
     private Double price;
+
+    @Column(name = "is_visible", columnDefinition = "boolean default true")
+    private boolean visible;
 
     //getters and setters
 
@@ -55,7 +60,6 @@ public class MedicineInstance {
         this.medicine = medicine;
     }
 
-
     public Integer getQuantityLeft() {
         return quantityLeft;
     }
@@ -68,9 +72,7 @@ public class MedicineInstance {
         return whomWasItPrescribed;
     }
 
-    public void setWhomWasItPrescribed(FamilyMember whomWasItPrescribed) {
-        this.whomWasItPrescribed = whomWasItPrescribed;
-    }
+    public void setWhomWasItPrescribed(FamilyMember whomWasItPrescribed) { this.whomWasItPrescribed = whomWasItPrescribed; }
 
     public Double getPrice() {
         return price;
@@ -80,11 +82,12 @@ public class MedicineInstance {
         this.price = price;
     }
 
-    public Long getMedicine_id() {
-        return medicine_id;
+
+    public boolean getVisible() {
+        return visible;
     }
 
-    public void setMedicine_id(Long medicine_id) {
-        this.medicine_id = medicine_id;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

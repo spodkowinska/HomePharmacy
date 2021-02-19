@@ -39,10 +39,8 @@ public class MedicineService {
     //MedicineInstance service
 
     public void saveMedicineInstance(MedicineInstance medicineInstance){
-        if (medicineRepository.findById(medicineInstance.getMedicine_id()).isPresent()) {
-            medicineInstance.setMedicine(medicineRepository.findById(medicineInstance.getMedicine_id()).orElse(null));
-            medicineInstanceRepository.save(medicineInstance);
-        }
+        medicineInstanceRepository.save(medicineInstance);
+
     }
 
     public List<MedicineInstance> findAllMedicineInstances(){
@@ -71,15 +69,32 @@ public class MedicineService {
     }
 
     public MedicineInstance findMedicineInstanceById(int id){
-        return medicineInstanceRepository.getOne(Long.valueOf(id));
+        return medicineInstanceRepository.getOne((long) id);
     }
 
     public void deleteMedicineInstanceById(int id){
         medicineInstanceRepository.deleteById(Long.valueOf(id));
     }
 
-    public void deleteMedicineInstance(MedicineInstance medicineInstance) {
-        medicineInstanceRepository.delete(medicineInstance);}
+    public void deleteMedicineInstance(Long id) {
+        medicineInstanceRepository.delete(findMedicineInstanceById(Math.toIntExact(id)));}
+
+    public void deleteAllMedicineInstances(Medicine medicine) {
+        List<MedicineInstance> allInstances = medicineInstanceRepository.findAll();
+        for (MedicineInstance instance : allInstances) {
+            if (instance.getMedicine().getId().equals(medicine.getId())) {
+                medicineInstanceRepository.deleteById(instance.getId());
+            }
+        }
+    }
+
+    public void setMedicineInstanceHidden(MedicineInstance medicineInstance) {
+        MedicineInstance medicineInstanceToHide = medicineInstanceRepository.findById(medicineInstance.getId()).orElse(null);
+        if (medicineInstanceToHide.getId()!=null) {
+            medicineInstanceToHide.setVisible(false);
+            medicineInstanceRepository.save(medicineInstanceToHide);
+        }
+    }
 
 
     // Wishlist service

@@ -12,6 +12,7 @@ import java.util.List;
 public class FamilyMember {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

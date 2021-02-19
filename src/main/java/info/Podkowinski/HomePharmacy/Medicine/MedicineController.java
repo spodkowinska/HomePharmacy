@@ -1,5 +1,6 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
+import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,19 @@ public class MedicineController {
     @Autowired
     private MedicineService medicineService;
 
+    @Autowired
+    private ActiveMedicinesService activeMedicinesService;
+
     @PostMapping("/add")
     public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
         Medicine medicine = new Medicine();
         return saveMedicine(addMedicineDTO, medicine);
     }
 
-    @PatchMapping(value="/edit")
+    @PatchMapping(value = "/edit")
     public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
         Medicine medicine = medicineService.findById(addMedicineDTO.getId());
-        return saveMedicine(addMedicineDTO, medicine);
+        return editMedicine(addMedicineDTO, medicine);
     }
 
     @DeleteMapping("/delete")
@@ -39,19 +43,56 @@ public class MedicineController {
         if (foundMedicine == null) {
             return ResponseEntity.notFound().build();
         } else {
-                return ResponseEntity.ok(foundMedicine);
-            }
+            return ResponseEntity.ok(foundMedicine);
+        }
     }
 
     public ResponseEntity saveMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
         medicine.setName(addMedicineDTO.getName());
-        medicine.setIsToBuy(addMedicineDTO.isToBuy());
-        medicine.setIsPrescriptionNeeded(addMedicineDTO.isPrescriptionNeeded());
-        medicine.setIsAntibiotic(addMedicineDTO.isSteroid());
+        medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
+        medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
+        medicine.setIsAntibiotic(addMedicineDTO.getIsAntibiotic());
         medicine.setDescription(addMedicineDTO.getDescription());
-        medicine.setIsSteroid(addMedicineDTO.isSteroid());
-        medicine.setIsVitamin(addMedicineDTO.isVitamin());
+        medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
+        medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
         medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+
+        medicineService.saveMedicine(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    public ResponseEntity editMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
+        if (addMedicineDTO.getName() != null) {
+            if (!addMedicineDTO.getName().equals(medicine.getName())) {
+                medicine.setName(addMedicineDTO.getName());
+            }
+        }
+        if (addMedicineDTO.getIsToBuy() != medicine.getIsToBuy()) {
+            medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
+        }
+        if (addMedicineDTO.getIsPrescriptionNeeded() != medicine.getIsPrescriptionNeeded()) {
+            medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
+        }
+        if (addMedicineDTO.getIsAntibiotic() != medicine.getIsAntibiotic()) {
+            medicine.setIsAntibiotic(addMedicineDTO.getIsSteroid());
+        }
+        if (addMedicineDTO.getDescription() != null) {
+            if (!addMedicineDTO.getDescription().equals(medicine.getDescription())) {
+                medicine.setDescription(addMedicineDTO.getDescription());
+            }
+        }
+        if (addMedicineDTO.getIsSteroid() != medicine.getIsSteroid()) {
+            medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
+        }
+        if (addMedicineDTO.getIsVitamin() != medicine.getIsVitamin()) {
+            medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
+        }
+        if (addMedicineDTO.getOfficialPrice()!=null) {
+            if (!addMedicineDTO.getOfficialPrice().equals(medicine.getOfficialPrice())) {
+                medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+            }
+        }
+
 
         medicineService.saveMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -65,7 +106,7 @@ public class MedicineController {
         return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
     }
 
-    @PutMapping("/editInstance")
+    @PatchMapping("/editInstance")
     public ResponseEntity editMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO) {
         MedicineInstance medicineInstance = medicineService.findMedicineInstanceById(addMedicineInstanceDTO.getId());
         return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
@@ -73,7 +114,13 @@ public class MedicineController {
 
     @DeleteMapping("/deleteInstance")
     public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
-        medicineService.deleteMedicineInstance(medicineInstance);
+        medicineService.deleteMedicineInstance(medicineInstance.getId());
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteAllInstances")
+    public ResponseEntity deleteAllInstances(@RequestBody Medicine medicine) {
+        medicineService.deleteAllMedicineInstances(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -85,6 +132,12 @@ public class MedicineController {
         } else {
             return ResponseEntity.ok(foundMedicineInstances);
         }
+    }
+
+    @PatchMapping("/setInstanceHidden")
+    public ResponseEntity setInstanceHidden(@RequestBody MedicineInstance medicineInstance) {
+        medicineService.setMedicineInstanceHidden(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     //lists last 15 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
@@ -99,11 +152,11 @@ public class MedicineController {
     }
 
     public ResponseEntity saveMedicineInstance(AddMedicineInstanceDTO addMedicineInstanceDTO, MedicineInstance medicineInstance) {
-        medicineInstance.setMedicine(addMedicineInstanceDTO.getMedicine());
+        medicineInstance.setMedicine(medicineService.findById(Math.toIntExact(addMedicineInstanceDTO.getMedicine_id())));
         medicineInstance.setQuantityLeft(addMedicineInstanceDTO.getQuantityLeft());
         medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
         medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
-        medicineInstance.setMedicine_id(addMedicineInstanceDTO.getMedicine_id());
+        medicineInstance.setVisible(addMedicineInstanceDTO.getVisible());
 
         medicineService.saveMedicineInstance(medicineInstance);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -132,6 +185,25 @@ public class MedicineController {
     public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine) {
         medicineService.removeFromWishlist(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    // family members medicines
+
+    @PostMapping("/addActiveMedicine")
+    public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO) {
+        ActiveMedicines activeMedicine = new ActiveMedicines();
+
+        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId()));
+        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId()));
+        activeMedicine.setActive(addActiveMedicineDTO.isActive());
+        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay());
+        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften());
+
+        activeMedicinesService.addActiveMedicine(activeMedicine);
+
+        System.out.println("hello");
+
+        return ResponseEntity.ok("New active medicine saved successfully!");
     }
 
 }

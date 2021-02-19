@@ -3,17 +3,16 @@ package info.Podkowinski.HomePharmacy.Medicine;
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import info.Podkowinski.HomePharmacy.User.User;
 import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.List;
-import java.util.Map;
+
 
 @Entity
 @Table(name = "medicines")
 public class Medicine {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -21,28 +20,13 @@ public class Medicine {
 
     private String description;
 
-//    @OneToMany
-//    private List<MedicineInstance> quantityWithExpiryDate;
-//
-//    @ManyToMany
-//    private List<User> whomWasItPrescribed;
-
-    @ColumnDefault(value = "false")
     private boolean isPrescriptionNeeded;
 
-    @ColumnDefault(value = "false")
     private boolean isSteroid;
 
-    @ColumnDefault(value = "false")
     private boolean isAntibiotic;
 
-
-    @ColumnDefault(value = "false")
     private boolean isVitamin;
-
-
-    @OneToMany
-    private List<Medicine> alternatives;
 
     private boolean isToBuy;
 
@@ -76,14 +60,7 @@ public class Medicine {
     public void setDescription(String description) {
         this.description = description;
     }
-//
-//    public List<User> getWhomWasItPrescribed() {
-//        return whomWasItPrescribed;
-//    }
-//
-//    public void setWhomWasItPrescribed(List<User> whomWasItPrescribed) {
-//        this.whomWasItPrescribed = whomWasItPrescribed;
-//    }
+
 
     public boolean getIsPrescriptionNeeded() {
         return isPrescriptionNeeded;
@@ -97,16 +74,16 @@ public class Medicine {
         return isSteroid;
     }
 
-    public void setIsSteroid(boolean steroid) {
-        isSteroid = steroid;
+    public void setIsSteroid(boolean isSteroid) {
+        isSteroid = isSteroid;
     }
 
     public boolean getIsAntibiotic() {
         return isAntibiotic;
     }
 
-    public void setIsAntibiotic(boolean antibiotic) {
-        isAntibiotic = antibiotic;
+    public void setIsAntibiotic(boolean isAntibiotic) {
+        isAntibiotic = isAntibiotic;
     }
 
 //    public List<Medicine> getAlternatives() {
@@ -121,8 +98,8 @@ public class Medicine {
         return isToBuy;
     }
 
-    public void setIsToBuy(boolean toBuy) {
-        isToBuy = toBuy;
+    public void setIsToBuy(boolean isToBuy) {
+        isToBuy = isToBuy;
     }
 
     public boolean getIsVitamin() {
