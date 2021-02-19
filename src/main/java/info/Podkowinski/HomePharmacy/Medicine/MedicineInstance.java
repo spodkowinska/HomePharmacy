@@ -3,7 +3,6 @@ package info.Podkowinski.HomePharmacy.Medicine;
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
 import java.sql.Date;
 
