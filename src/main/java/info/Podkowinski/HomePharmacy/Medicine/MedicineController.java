@@ -45,12 +45,12 @@ public class MedicineController {
 
     public ResponseEntity saveMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
         medicine.setName(addMedicineDTO.getName());
-        medicine.setIsToBuy(addMedicineDTO.isToBuy());
-        medicine.setIsPrescriptionNeeded(addMedicineDTO.isPrescriptionNeeded());
-        medicine.setIsAntibiotic(addMedicineDTO.isSteroid());
+        medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
+        medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
+        medicine.setIsAntibiotic(addMedicineDTO.getIsAntibiotic());
         medicine.setDescription(addMedicineDTO.getDescription());
-        medicine.setIsSteroid(addMedicineDTO.isSteroid());
-        medicine.setIsVitamin(addMedicineDTO.isVitamin());
+        medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
+        medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
         medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
 
         medicineService.saveMedicine(medicine);
@@ -63,25 +63,25 @@ public class MedicineController {
                 medicine.setName(addMedicineDTO.getName());
             }
         }
-        if (addMedicineDTO.isToBuy() != medicine.getIsToBuy()) {
-            medicine.setIsToBuy(addMedicineDTO.isToBuy());
+        if (addMedicineDTO.getIsToBuy() != medicine.getIsToBuy()) {
+            medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
         }
-        if (addMedicineDTO.isPrescriptionNeeded() != medicine.getIsPrescriptionNeeded()) {
-            medicine.setIsPrescriptionNeeded(addMedicineDTO.isPrescriptionNeeded());
+        if (addMedicineDTO.getIsPrescriptionNeeded() != medicine.getIsPrescriptionNeeded()) {
+            medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
         }
-        if (addMedicineDTO.isAntibiotic() != medicine.getIsAntibiotic()) {
-            medicine.setIsAntibiotic(addMedicineDTO.isSteroid());
+        if (addMedicineDTO.getIsAntibiotic() != medicine.getIsAntibiotic()) {
+            medicine.setIsAntibiotic(addMedicineDTO.getIsSteroid());
         }
         if (addMedicineDTO.getDescription() != null) {
             if (!addMedicineDTO.getDescription().equals(medicine.getDescription())) {
                 medicine.setDescription(addMedicineDTO.getDescription());
             }
         }
-        if (addMedicineDTO.isSteroid() != medicine.getIsSteroid()) {
-            medicine.setIsSteroid(addMedicineDTO.isSteroid());
+        if (addMedicineDTO.getIsSteroid() != medicine.getIsSteroid()) {
+            medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
         }
-        if (addMedicineDTO.isVitamin() != medicine.getIsVitamin()) {
-            medicine.setIsVitamin(addMedicineDTO.isVitamin());
+        if (addMedicineDTO.getIsVitamin() != medicine.getIsVitamin()) {
+            medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
         }
         if (addMedicineDTO.getOfficialPrice()!=null) {
             if (!addMedicineDTO.getOfficialPrice().equals(medicine.getOfficialPrice())) {
