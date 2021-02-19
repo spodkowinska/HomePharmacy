@@ -19,17 +19,17 @@ public class AddMedicineDTO {
 
     private Double officialPrice;
 
-    public AddMedicineDTO(int id, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.isPrescriptionNeeded = isPrescriptionNeeded;
-        this.isSteroid = isSteroid;
-        this.isAntibiotic = isAntibiotic;
-        this.isVitamin = isVitamin;
-        this.isToBuy = isToBuy;
-        this.officialPrice = officialPrice;
-    }
+//    public AddMedicineDTO(int id, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice) {
+//        this.id = id;
+//        this.name = name;
+//        this.description = description;
+//        this.isPrescriptionNeeded = isPrescriptionNeeded;
+//        this.isSteroid = isSteroid;
+//        this.isAntibiotic = isAntibiotic;
+//        this.isVitamin = isVitamin;
+//        this.isToBuy = isToBuy;
+//        this.officialPrice = officialPrice;
+//    }
 
     public int getId() {
         return id;
@@ -55,23 +55,23 @@ public class AddMedicineDTO {
         this.description = description;
     }
 
-    public boolean isPrescriptionNeeded() {
+    public boolean getIsPrescriptionNeeded() {
         return isPrescriptionNeeded;
     }
 
-    public void setPrescriptionNeeded(boolean prescriptionNeeded) {
+    public void setIsPrescriptionNeeded(boolean prescriptionNeeded) {
         isPrescriptionNeeded = prescriptionNeeded;
     }
 
-    public boolean isSteroid() {
+    public boolean getIsSteroid() {
         return isSteroid;
     }
 
-    public void setSteroid(boolean steroid) {
-        isSteroid = steroid;
+    public void setIsSteroid(boolean isSteroid) {
+        isSteroid = isSteroid;
     }
 
-    public boolean isAntibiotic() {
+    public boolean getIsAntibiotic() {
         return isAntibiotic;
     }
 
@@ -79,19 +79,19 @@ public class AddMedicineDTO {
         isAntibiotic = antibiotic;
     }
 
-    public boolean isVitamin() {
+    public boolean getIsVitamin() {
         return isVitamin;
     }
 
-    public void setVitamin(boolean vitamin) {
-        isVitamin = vitamin;
+    public void setIsVitamin(boolean isVitamin) {
+        isVitamin = isVitamin;
     }
 
-    public boolean isToBuy() {
+    public boolean getIsToBuy() {
         return isToBuy;
     }
 
-    public void setToBuy(boolean toBuy) {
+    public void setIsToBuy(boolean toBuy) {
         isToBuy = toBuy;
     }
 
