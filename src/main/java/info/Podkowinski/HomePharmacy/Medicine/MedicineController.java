@@ -21,10 +21,10 @@ public class MedicineController {
         return saveMedicine(addMedicineDTO, medicine);
     }
 
-    @PatchMapping(value="/edit")
+    @PatchMapping(value = "/edit")
     public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
         Medicine medicine = medicineService.findById(addMedicineDTO.getId());
-        return saveMedicine(addMedicineDTO, medicine);
+        return editMedicine(addMedicineDTO, medicine);
     }
 
     @DeleteMapping("/delete")
@@ -39,8 +39,8 @@ public class MedicineController {
         if (foundMedicine == null) {
             return ResponseEntity.notFound().build();
         } else {
-                return ResponseEntity.ok(foundMedicine);
-            }
+            return ResponseEntity.ok(foundMedicine);
+        }
     }
 
     public ResponseEntity saveMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
@@ -52,6 +52,43 @@ public class MedicineController {
         medicine.setIsSteroid(addMedicineDTO.isSteroid());
         medicine.setIsVitamin(addMedicineDTO.isVitamin());
         medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+
+        medicineService.saveMedicine(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    public ResponseEntity editMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
+        if (addMedicineDTO.getName() != null) {
+            if (!addMedicineDTO.getName().equals(medicine.getName())) {
+                medicine.setName(addMedicineDTO.getName());
+            }
+        }
+        if (addMedicineDTO.isToBuy() != medicine.getIsToBuy()) {
+            medicine.setIsToBuy(addMedicineDTO.isToBuy());
+        }
+        if (addMedicineDTO.isPrescriptionNeeded() != medicine.getIsPrescriptionNeeded()) {
+            medicine.setIsPrescriptionNeeded(addMedicineDTO.isPrescriptionNeeded());
+        }
+        if (addMedicineDTO.isAntibiotic() != medicine.getIsAntibiotic()) {
+            medicine.setIsAntibiotic(addMedicineDTO.isSteroid());
+        }
+        if (addMedicineDTO.getDescription() != null) {
+            if (!addMedicineDTO.getDescription().equals(medicine.getDescription())) {
+                medicine.setDescription(addMedicineDTO.getDescription());
+            }
+        }
+        if (addMedicineDTO.isSteroid() != medicine.getIsSteroid()) {
+            medicine.setIsSteroid(addMedicineDTO.isSteroid());
+        }
+        if (addMedicineDTO.isVitamin() != medicine.getIsVitamin()) {
+            medicine.setIsVitamin(addMedicineDTO.isVitamin());
+        }
+        if (addMedicineDTO.getOfficialPrice()!=null) {
+            if (!addMedicineDTO.getOfficialPrice().equals(medicine.getOfficialPrice())) {
+                medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+            }
+        }
+
 
         medicineService.saveMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -93,6 +130,12 @@ public class MedicineController {
         }
     }
 
+    @PatchMapping("/setInstanceHidden")
+    public ResponseEntity setInstanceHidden(@RequestBody MedicineInstance medicineInstance) {
+        medicineService.setMedicineInstanceHidden(medicineInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     //lists last 15 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
     @GetMapping("/listLastInstances")
     public ResponseEntity<List<MedicineInstance>> listLastInstances() {
@@ -110,6 +153,7 @@ public class MedicineController {
         medicineInstance.setExpiryDate(addMedicineInstanceDTO.getExpiryDate());
         medicineInstance.setPrice(addMedicineInstanceDTO.getPrice());
         medicineInstance.setMedicine_id(addMedicineInstanceDTO.getMedicine_id());
+        medicineInstance.setVisible(addMedicineInstanceDTO.isVisible());
 
         medicineService.saveMedicineInstance(medicineInstance);
         return ResponseEntity.ok(HttpStatus.OK);

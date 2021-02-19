@@ -90,6 +90,14 @@ public class MedicineService {
         }
     }
 
+    public void setMedicineInstanceHidden(MedicineInstance medicineInstance) {
+        MedicineInstance medicineInstanceToHide = medicineInstanceRepository.findById(medicineInstance.getId()).orElse(null);
+        if (medicineInstanceToHide.getId()!=null) {
+            medicineInstanceToHide.setVisible(false);
+            medicineInstanceRepository.save(medicineInstanceToHide);
+        }
+    }
+
 
     // Wishlist service
 

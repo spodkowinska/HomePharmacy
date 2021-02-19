@@ -32,6 +32,9 @@ public class MedicineInstance {
 
     private Double price;
 
+    @Column(name = "is_visible", columnDefinition = "boolean default true")
+    private boolean isVisible;
+
     //getters and setters
 
     public Long getId() {
@@ -58,7 +61,6 @@ public class MedicineInstance {
         this.medicine = medicine;
     }
 
-
     public Integer getQuantityLeft() {
         return quantityLeft;
     }
@@ -71,9 +73,7 @@ public class MedicineInstance {
         return whomWasItPrescribed;
     }
 
-    public void setWhomWasItPrescribed(FamilyMember whomWasItPrescribed) {
-        this.whomWasItPrescribed = whomWasItPrescribed;
-    }
+    public void setWhomWasItPrescribed(FamilyMember whomWasItPrescribed) { this.whomWasItPrescribed = whomWasItPrescribed; }
 
     public Double getPrice() {
         return price;
@@ -89,5 +89,13 @@ public class MedicineInstance {
 
     public void setMedicine_id(Long medicine_id) {
         this.medicine_id = medicine_id;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
     }
 }
