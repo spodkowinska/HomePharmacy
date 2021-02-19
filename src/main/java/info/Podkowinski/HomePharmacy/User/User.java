@@ -1,11 +1,7 @@
 package info.Podkowinski.HomePharmacy.User;
 
-import info.Podkowinski.HomePharmacy.Medicine.Medicine;
-import info.Podkowinski.HomePharmacy.Sickness.Sickness;
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
-import java.util.List;
+
 
 @Entity
 @Table(name = "users")

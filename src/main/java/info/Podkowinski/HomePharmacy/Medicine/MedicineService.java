@@ -3,7 +3,10 @@ package info.Podkowinski.HomePharmacy.Medicine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -44,16 +47,54 @@ public class MedicineService {
         return medicineInstanceRepository.findAll();
     }
 
+    public List<MedicineInstance> findLastMedicineInstances(){
+        List<MedicineInstance> allMedicineInstances = findAllMedicineInstances();
+        List<MedicineInstance> lastMedicineInstances = new ArrayList<>();
+        Date now = Date.valueOf(LocalDate.now());
+        Date future = Date.valueOf(LocalDate.now().plusDays(7));
+        for (MedicineInstance medicineInstance : allMedicineInstances) {
+            if (medicineInstance.getExpiryDate() != null && medicineInstance.getQuantityLeft() != null) {
+                if (medicineInstance.getQuantityLeft() < 10 || medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) == 1) {
+                    lastMedicineInstances.add(medicineInstance);
+                }
+            }
+        }
+        List<MedicineInstance> sortedList = new ArrayList<>(lastMedicineInstances);
+        sortedList.sort(Comparator.comparing(MedicineInstance::getExpiryDate));
+        if (sortedList.size() > 16) {
+            return sortedList.subList(sortedList.size() -16, sortedList.size());
+        } else {
+            return sortedList;
+        }
+    }
+
     public MedicineInstance findMedicineInstanceById(int id){
-        return medicineInstanceRepository.getOne(Long.valueOf(id));
+        return medicineInstanceRepository.getOne((long) id);
     }
 
     public void deleteMedicineInstanceById(int id){
         medicineInstanceRepository.deleteById(Long.valueOf(id));
     }
 
-    public void deleteMedicineInstance(MedicineInstance medicineInstance) {
-        medicineInstanceRepository.delete(medicineInstance);}
+    public void deleteMedicineInstance(Long id) {
+        medicineInstanceRepository.delete(findMedicineInstanceById(Math.toIntExact(id)));}
+
+    public void deleteAllMedicineInstances(Medicine medicine) {
+        List<MedicineInstance> allInstances = medicineInstanceRepository.findAll();
+        for (MedicineInstance instance : allInstances) {
+            if (instance.getMedicine().getId().equals(medicine.getId())) {
+                medicineInstanceRepository.deleteById(instance.getId());
+            }
+        }
+    }
+
+    public void setMedicineInstanceHidden(MedicineInstance medicineInstance) {
+        MedicineInstance medicineInstanceToHide = medicineInstanceRepository.findById(medicineInstance.getId()).orElse(null);
+        if (medicineInstanceToHide.getId()!=null) {
+            medicineInstanceToHide.setVisible(false);
+            medicineInstanceRepository.save(medicineInstanceToHide);
+        }
+    }
 
 
     // Wishlist service

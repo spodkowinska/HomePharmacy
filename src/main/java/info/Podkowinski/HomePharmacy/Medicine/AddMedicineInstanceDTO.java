@@ -15,12 +15,16 @@ public class AddMedicineInstanceDTO {
 
     private Double price;
 
-    public AddMedicineInstanceDTO(int id, Long medicine_id, Integer quantityLeft, Date expiryDate, Double price) {
+    private boolean visible = true;
+
+
+    public AddMedicineInstanceDTO(int id, Long medicine_id, Integer quantityLeft, Date expiryDate, Double price, boolean visible) {
         this.id = id;
         this.medicine_id = medicine_id;
         this.quantityLeft = quantityLeft;
         this.expiryDate = expiryDate;
         this.price = price;
+        this.visible = visible;
     }
 
     public AddMedicineInstanceDTO() {
@@ -66,5 +70,13 @@ public class AddMedicineInstanceDTO {
 
     public void setMedicine_id(Long medicine_id) {
         this.medicine_id = medicine_id;
+    }
+
+    public boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
