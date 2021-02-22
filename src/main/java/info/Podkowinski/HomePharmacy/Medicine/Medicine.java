@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "medicines")
+
 public class Medicine {
 
     @Id
@@ -18,6 +18,7 @@ public class Medicine {
 
     private String name;
 
+    @Column(length = 5000)
     private String description;
 
     private boolean isPrescriptionNeeded;
@@ -34,6 +35,10 @@ public class Medicine {
 
     @ManyToOne
     private User user;
+
+    @OneToMany
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
+    private List <MedicineAlternative> alternatives;
 
     // getters and setters
 
@@ -86,13 +91,6 @@ public class Medicine {
         isAntibiotic = antibiotic;
     }
 
-//    public List<Medicine> getAlternatives() {
-//        return alternatives;
-//    }
-//
-//    public void setAlternatives(List<Medicine> alternatives) {
-//        this.alternatives = alternatives;
-//    }
 
     public boolean getIsToBuy() {
         return isToBuy;
@@ -116,5 +114,13 @@ public class Medicine {
 
     public void setOfficialPrice(Double officialPrice) {
         this.officialPrice = officialPrice;
+    }
+
+    public List<MedicineAlternative> getAlternatives() {
+        return alternatives;
+    }
+
+    public void setAlternatives(List<MedicineAlternative> alternatives) {
+        this.alternatives = alternatives;
     }
 }
