@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Entity
-
+@Table(name = "medicines")
 public class Medicine {
 
     @Id
