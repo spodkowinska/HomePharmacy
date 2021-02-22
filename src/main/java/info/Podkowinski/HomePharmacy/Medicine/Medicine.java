@@ -33,7 +33,7 @@ public class Medicine {
 
     private Double officialPrice;
 
-    @ManyToOne
+    @ManyToOne(optional=false)
     private User user;
 
     @OneToMany
