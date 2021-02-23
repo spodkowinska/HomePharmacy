@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -208,21 +209,30 @@ public class MedicineController {
 
     // family members medicines
 
+    // adding active medicine - information about data that should be passed by json is below
     @PostMapping("/addActiveMedicine")
     public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO) {
         ActiveMedicines activeMedicine = new ActiveMedicines();
 
-        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId()));
-        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId()));
-        activeMedicine.setActive(addActiveMedicineDTO.isActive());
-        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay());
-        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften());
+        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId())); // family member that should be connected to active medicine
+        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId())); // json medicine instance that should be connected to active medicine
+        activeMedicine.setEatAtDate(addActiveMedicineDTO.getEatAtDate()); // start eating pill from date - format yyyy-mm-dd
+        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay()); // how many pills should be eaten per day
+        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften()); // information in days
+        activeMedicine.setAlreadyTaken(addActiveMedicineDTO.getAlreadyTaken()); // json default value is 0 but user can choose if he/she already ate some pills
+        activeMedicine.setHidden(addActiveMedicineDTO.isHidden()); // default value should be false - hidden true is after each pill has been eaten at actual day
+        activeMedicine.setAllTakenOnTime(addActiveMedicineDTO.isAllTakenOnTime()); // default value should be true and then if user didn't took all pills on time it will be changed to false
 
         activeMedicinesService.addActiveMedicine(activeMedicine);
 
-        System.out.println("hello");
-
         return ResponseEntity.ok("New active medicine saved successfully!");
+    }
+
+    @GetMapping("/showTodaysMedicines")
+    public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines() {
+
+
+        return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(1L)); // by user id
     }
 
 }

@@ -1,8 +1,11 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
+import com.sun.istack.NotNull;
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import info.Podkowinski.HomePharmacy.User.User;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class Medicine {
 
     private Double officialPrice;
 
+//    @ManyToOne(optional = false)
     @ManyToOne
     private User user;
 
