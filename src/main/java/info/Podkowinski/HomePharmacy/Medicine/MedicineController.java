@@ -228,11 +228,33 @@ public class MedicineController {
         return ResponseEntity.ok("New active medicine saved successfully!");
     }
 
+    // returns list of todays medicines for each family member depends of user id
     @GetMapping("/showTodaysMedicines")
     public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines() {
 
-
         return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(1L)); // by user id
+    }
+
+    // update medicine instance and active medicine - needs "medicineInstanceId" in json body
+    // to set medicine instance quantity left -1 and active medicine already taken + 1
+    // works for each request
+    @PatchMapping("/updateActiveMedicineInstance")
+    public ResponseEntity updateActiveMedicineInstance(@RequestBody AddActiveMedicineDTO updateMedicineInstance) {
+
+        MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
+        ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
+
+        medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
+        updatedActiveMedicine.setAlreadyTaken(updatedActiveMedicine.getAlreadyTaken() + 1);
+
+        if (updatedActiveMedicine.getAlreadyTaken() == updatedActiveMedicine.getQuantityPerDay()) {
+            updatedActiveMedicine.setHidden(true);
+        }
+
+        medicineService.saveMedicineInstance(medicineInstanceToUpdate);
+        activeMedicinesService.updateActiveMedicine(updatedActiveMedicine);
+
+        return ResponseEntity.ok("Don't worry! Be happy!");
     }
 
 }

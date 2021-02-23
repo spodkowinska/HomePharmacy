@@ -28,6 +28,8 @@ public class ActiveMedicinesService {
 
     public void updateActiveMedicine(ActiveMedicines updatedMedicine) { activeMedicinesRepository.save(updatedMedicine); }
 
+    public ActiveMedicines findActiveMedicine(Long id) { return activeMedicinesRepository.findById(id).orElse(null); }
+
     public FamilyMember findById(Long id) {
         return familyRepository.findById(id).orElse(null);
     }
@@ -75,4 +77,8 @@ public class ActiveMedicinesService {
         }
         return todaysMedicines;
     }
+
+//    public void updateActiveMedicineInstance(Long id) {
+//
+//    }
 }
