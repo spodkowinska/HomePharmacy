@@ -72,10 +72,6 @@ public class MedicineService {
         return medicineInstanceRepository.getOne((long) id);
     }
 
-    public void deleteMedicineInstanceById(int id){
-        medicineInstanceRepository.deleteById(Long.valueOf(id));
-    }
-
     public void deleteMedicineInstance(Long id) {
         medicineInstanceRepository.delete(findMedicineInstanceById(Math.toIntExact(id)));}
 

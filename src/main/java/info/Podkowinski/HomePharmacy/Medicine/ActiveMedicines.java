@@ -1,10 +1,13 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
+import info.Podkowinski.HomePharmacy.User.User;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "active_medicines")
@@ -19,18 +22,28 @@ public class ActiveMedicines {
     @JoinColumn(name = "medicine_instance_id", referencedColumnName = "id")
     private MedicineInstance medicineInstance;
 
-
     @ManyToOne(cascade=CascadeType.ALL)
 //    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "family_member_id", referencedColumnName = "id")
     private FamilyMember familyMember;
 
-    private boolean isActive;
+    //    @ManyToOne(optional = false)
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private Integer quantityPerDay;
+    private Integer quantityPerDay; //3  localhost..../pillTaken
+
+    private LocalDate eatAtDate;
 
     private Integer howOften;
 
+    private Integer alreadyTaken; //0
+
+    private boolean hidden;
+
+    private boolean allTakenOnTime;
 
     public Long getId() {
         return id;
@@ -56,13 +69,13 @@ public class ActiveMedicines {
         this.familyMember = familyMember;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
+    public User getUser() { return user; }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
+    public void setUser(User user) { this.user = user; }
+
+    public LocalDate getEatAtDate() { return eatAtDate; }
+
+    public void setEatAtDate(LocalDate eatAtDate) { this.eatAtDate = eatAtDate; }
 
     public Integer getQuantityPerDay() {
         return quantityPerDay;
@@ -79,4 +92,16 @@ public class ActiveMedicines {
     public void setHowOften(Integer howOften) {
         this.howOften = howOften;
     }
+
+    public Integer getAlreadyTaken() { return alreadyTaken; }
+
+    public void setAlreadyTaken(Integer alreadyTaken) { this.alreadyTaken = alreadyTaken; }
+
+    public boolean isHidden() { return hidden; }
+
+    public void setHidden(boolean hidden) { this.hidden = hidden; }
+
+    public boolean isAllTakenOnTime() { return allTakenOnTime; }
+
+    public void setAllTakenOnTime(boolean allTakenOnTime) { this.allTakenOnTime = allTakenOnTime; }
 }

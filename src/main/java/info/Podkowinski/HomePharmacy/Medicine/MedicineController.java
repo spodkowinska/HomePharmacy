@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -208,21 +209,52 @@ public class MedicineController {
 
     // family members medicines
 
+    // adding active medicine - information about data that should be passed by json is below
     @PostMapping("/addActiveMedicine")
     public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO) {
         ActiveMedicines activeMedicine = new ActiveMedicines();
 
-        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId()));
-        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId()));
-        activeMedicine.setActive(addActiveMedicineDTO.isActive());
-        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay());
-        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften());
+        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId())); // family member that should be connected to active medicine
+        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId())); // json medicine instance that should be connected to active medicine
+        activeMedicine.setEatAtDate(addActiveMedicineDTO.getEatAtDate()); // start eating pill from date - format yyyy-mm-dd
+        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay()); // how many pills should be eaten per day
+        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften()); // information in days
+        activeMedicine.setAlreadyTaken(addActiveMedicineDTO.getAlreadyTaken()); // json default value is 0 but user can choose if he/she already ate some pills
+        activeMedicine.setHidden(addActiveMedicineDTO.isHidden()); // default value should be false - hidden true is after each pill has been eaten at actual day
+        activeMedicine.setAllTakenOnTime(addActiveMedicineDTO.isAllTakenOnTime()); // default value should be true and then if user didn't took all pills on time it will be changed to false
 
         activeMedicinesService.addActiveMedicine(activeMedicine);
 
-        System.out.println("hello");
-
         return ResponseEntity.ok("New active medicine saved successfully!");
+    }
+
+    // returns list of todays medicines for each family member depends of user id
+    @GetMapping("/showTodaysMedicines")
+    public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines() {
+
+        return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(1L)); // by user id
+    }
+
+    // update medicine instance and active medicine - needs "medicineInstanceId" in json body
+    // to set medicine instance quantity left -1 and active medicine already taken + 1
+    // works for each request
+    @PatchMapping("/updateActiveMedicineInstance")
+    public ResponseEntity updateActiveMedicineInstance(@RequestBody AddActiveMedicineDTO updateMedicineInstance) {
+
+        MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
+        ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
+
+        medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
+        updatedActiveMedicine.setAlreadyTaken(updatedActiveMedicine.getAlreadyTaken() + 1);
+
+        if (updatedActiveMedicine.getAlreadyTaken() == updatedActiveMedicine.getQuantityPerDay()) {
+            updatedActiveMedicine.setHidden(true);
+        }
+
+        medicineService.saveMedicineInstance(medicineInstanceToUpdate);
+        activeMedicinesService.updateActiveMedicine(updatedActiveMedicine);
+
+        return ResponseEntity.ok("Don't worry! Be happy!");
     }
 
 }
