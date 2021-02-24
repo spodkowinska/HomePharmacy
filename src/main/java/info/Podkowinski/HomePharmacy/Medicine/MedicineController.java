@@ -265,7 +265,7 @@ public class MedicineController {
     @PatchMapping("/updateActiveMedicineInstance")
     public ResponseEntity updateActiveMedicineInstance(@RequestBody AddActiveMedicineDTO updateMedicineInstance, @RequestHeader String userId) {
 
-        MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
+        MedicineInstance medicineInstanceToUpdate = updateMedicineInstance.getMedicineInstance();
         ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
 
         medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
@@ -278,7 +278,7 @@ public class MedicineController {
         medicineService.saveMedicineInstance(medicineInstanceToUpdate);
         activeMedicinesService.updateActiveMedicine(updatedActiveMedicine);
 
-        return ResponseEntity.ok("Don't worry! Be happy!");
+        return ResponseEntity.ok("Active medicine updated successfully!");
     }
 
 }

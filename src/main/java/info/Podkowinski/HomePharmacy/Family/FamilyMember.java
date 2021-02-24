@@ -46,7 +46,7 @@ public class FamilyMember {
 
     public String getNotes() { return notes; }
 
-    public void setNotes(String surname) { this.notes = notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 
     public int getAge() { return age; }
 
