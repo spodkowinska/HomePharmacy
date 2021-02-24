@@ -53,12 +53,16 @@ public class MedicineService {
         return medicineInstanceRepository.findAllByMedicine(medicineId);
     }
 
-    public List<MedicineInstance> findAllMedicineInstances(){
-        return medicineInstanceRepository.findAll();
+    public List<MedicineInstance> findAllMedicineInstancesByUser(String userId){
+        List<Long>medicineIds = new ArrayList<>();
+        List<MedicineInstance> instances = new ArrayList<>();
+        medicineRepository.findAllByUserId(userId).forEach(m->medicineIds.add(m.getId()));
+        medicineIds.forEach(i->instances.addAll(medicineInstanceRepository.findAllByMedicine(i)));
+    return instances;
     }
 
-    public List<MedicineInstance> findLastMedicineInstances(){
-        List<MedicineInstance> allMedicineInstances = findAllMedicineInstances();
+    public List<MedicineInstance> findLastMedicineInstances(String userId){
+        List<MedicineInstance> allMedicineInstances = findAllMedicineInstancesByUser(userId);
         List<MedicineInstance> lastMedicineInstances = new ArrayList<>();
         Date now = Date.valueOf(LocalDate.now());
         Date future = Date.valueOf(LocalDate.now().plusDays(7));
@@ -105,28 +109,22 @@ public class MedicineService {
 
     // Wishlist service
 
-    public List<Medicine> showWishList() {
-        List<Medicine> allMedicine = medicineRepository.findAll();
-        List<Medicine> wishlist = new ArrayList<>();
-        for ( Medicine medicine : allMedicine) {
-            if (medicine.getIsToBuy()) {
-                 wishlist.add(medicine);
-            }
-        }
-            return wishlist;
+    public List<Medicine> showWishList(String userId) {
+        List<Medicine> wishList = medicineRepository.findAllByIsToBuyTrueAndUserId(userId);
+        return wishList;
     }
 
-    public void addToWishList(Medicine medicine) {
+    public void addToWishList(Medicine medicine, String userId) {
         Medicine medicineToChange = medicineRepository.findById(medicine.getId()).orElse(null);
-        if (medicineToChange.getId()!=null) {
+        if (medicineToChange !=null && medicineToChange.getUser().getId().equals(userId)) {
             medicineToChange.setIsToBuy(true);
             medicineRepository.save(medicineToChange);
         }
     }
 
-    public void removeFromWishlist(Medicine medicine) {
+    public void removeFromWishlist(Medicine medicine, String userId) {
         Medicine medicineToChange = medicineRepository.findById(medicine.getId()).orElse(null);
-        if (medicineToChange.getId()!=null) {
+        if (medicineToChange !=null && medicineToChange.getUser().getId().equals(userId)) {
             medicineToChange.setIsToBuy(false);
             medicineRepository.save(medicineToChange);
         }

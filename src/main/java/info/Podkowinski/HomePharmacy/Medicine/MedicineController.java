@@ -27,7 +27,7 @@ public class MedicineController {
     private FamilyService familyService;
 
     @PostMapping("/add")
-    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
+    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
         Medicine medicine = new Medicine();
         return saveMedicine(addMedicineDTO, medicine);
     }
@@ -131,32 +131,47 @@ public class MedicineController {
     //MedicineInstance mappings
 
     @PostMapping("/addInstance")
-    public ResponseEntity addMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO, @RequestHeader String userId) {
-        MedicineInstance medicineInstance = new MedicineInstance();
-        return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+    public ResponseEntity addMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO, @RequestHeader HttpHeaders header) {
+        if (addMedicineInstanceDTO.getUserId().equals(header.getFirst("userId"))) {
+            MedicineInstance medicineInstance = new MedicineInstance();
+            return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/editInstance")
     public ResponseEntity editMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO, @RequestHeader String userId) {
-        MedicineInstance medicineInstance = medicineService.findMedicineInstanceById(addMedicineInstanceDTO.getId());
-        return editMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+        if (addMedicineInstanceDTO.getUserId().equals(userId)) {
+            MedicineInstance medicineInstance = medicineService.findMedicineInstanceById(addMedicineInstanceDTO.getId());
+            return editMedicineInstance(addMedicineInstanceDTO, medicineInstance);
+        }
+        return ResponseEntity.notFound().build();
+
     }
 
     @DeleteMapping("/deleteInstance")
-    public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance, @RequestHeader String userId) {
-        medicineService.deleteMedicineInstance(medicineInstance.getId());
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance, @RequestHeader HttpHeaders header) {
+
+        if (medicineInstance.getMedicine().getUser().getId().equals(header.getFirst("userId"))) {
+            medicineService.deleteMedicineInstance(medicineInstance.getId());
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/deleteAllInstances")
-    public ResponseEntity deleteAllInstances(@RequestBody Medicine medicine, @RequestHeader String userId) {
-        medicineService.deleteAllMedicineInstances(medicine);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity deleteAllInstances(@RequestBody Medicine medicine, @RequestHeader HttpHeaders header) {
+
+        if (medicine.getUser().getId().equals(header.getFirst("userId"))) {
+            medicineService.deleteAllMedicineInstances(medicine);
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/listInstances")
     public ResponseEntity<List<MedicineInstance>> listInstances(@RequestHeader String userId) {
-        List<MedicineInstance> foundMedicineInstances = medicineService.findAllMedicineInstances();
+        List<MedicineInstance> foundMedicineInstances = medicineService.findAllMedicineInstancesByUser(userId);
         if (foundMedicineInstances == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -166,14 +181,18 @@ public class MedicineController {
 
     @PatchMapping("/setInstanceHidden")
     public ResponseEntity setInstanceHidden(@RequestBody MedicineInstance medicineInstance, @RequestHeader String userId) {
-        medicineService.setMedicineInstanceHidden(medicineInstance);
-        return ResponseEntity.ok(HttpStatus.OK);
+        if(medicineInstance.getMedicine().getUser().getId().equals(userId)) {
+            medicineService.setMedicineInstanceHidden(medicineInstance);
+            return ResponseEntity.ok(HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //lists last 15 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
     @GetMapping("/listLastInstances")
     public ResponseEntity<List<MedicineInstance>> listLastInstances(@RequestHeader String userId) {
-        List<MedicineInstance> foundMedicineInstances = medicineService.findLastMedicineInstances();
+        List<MedicineInstance> foundMedicineInstances = medicineService.findLastMedicineInstances(userId);
         if (foundMedicineInstances == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -217,14 +236,14 @@ public class MedicineController {
 
     @PatchMapping("/addToWishlist")
     public ResponseEntity addToWishList(@RequestBody Medicine medicine, @RequestHeader String userId) {
-        medicineService.addToWishList(medicine);
+        medicineService.addToWishList(medicine, userId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
     @GetMapping("/showWishlist")
     public ResponseEntity<List<Medicine>> showWishlist(@RequestHeader String userId) {
-        List<Medicine> wishlist = medicineService.showWishList();
+        List<Medicine> wishlist = medicineService.showWishList(userId);
         if (wishlist == null) {
             return ResponseEntity.notFound().build();
         } else {
@@ -234,7 +253,7 @@ public class MedicineController {
 
     @PatchMapping("/removeFromWishlist")
     public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine, @RequestHeader String userId) {
-        medicineService.removeFromWishlist(medicine);
+        medicineService.removeFromWishlist(medicine, userId);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -244,26 +263,26 @@ public class MedicineController {
     @PostMapping("/addActiveMedicine")
     public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO, @RequestHeader String userId) {
         ActiveMedicines activeMedicine = new ActiveMedicines();
-
-        activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId())); // family member that should be connected to active medicine
-        activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId())); // json medicine instance that should be connected to active medicine
-        activeMedicine.setEatAtDate(addActiveMedicineDTO.getEatAtDate()); // start eating pill from date - format yyyy-mm-dd
-        activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay()); // how many pills should be eaten per day
-        activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften()); // information in days
-        activeMedicine.setAlreadyTaken(addActiveMedicineDTO.getAlreadyTaken()); // json default value is 0 but user can choose if he/she already ate some pills
-        activeMedicine.setHidden(addActiveMedicineDTO.isHidden()); // default value should be false - hidden true is after each pill has been eaten at actual day
-        activeMedicine.setAllTakenOnTime(addActiveMedicineDTO.isAllTakenOnTime()); // default value should be true and then if user didn't took all pills on time it will be changed to false
-
-        activeMedicinesService.addActiveMedicine(activeMedicine);
-
-        return ResponseEntity.ok("New active medicine saved successfully!");
+        if(addActiveMedicineDTO.getUserId().equals(userId)) {
+            activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId())); // family member that should be connected to active medicine
+            activeMedicine.setMedicineInstance(activeMedicinesService.findMedicineInstanceById(addActiveMedicineDTO.getMedicineInstanceId())); // json medicine instance that should be connected to active medicine
+            activeMedicine.setEatAtDate(addActiveMedicineDTO.getEatAtDate()); // start eating pill from date - format yyyy-mm-dd
+            activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay()); // how many pills should be eaten per day
+            activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften()); // information in days
+            activeMedicine.setAlreadyTaken(addActiveMedicineDTO.getAlreadyTaken()); // json default value is 0 but user can choose if he/she already ate some pills
+            activeMedicine.setHidden(addActiveMedicineDTO.isHidden()); // default value should be false - hidden true is after each pill has been eaten at actual day
+            activeMedicine.setAllTakenOnTime(addActiveMedicineDTO.isAllTakenOnTime()); // default value should be true and then if user didn't took all pills on time it will be changed to false
+            activeMedicinesService.addActiveMedicine(activeMedicine);
+            return ResponseEntity.ok("New active medicine saved successfully!");
+        }
+        return ResponseEntity.notFound().build();
     }
 
     // returns list of todays medicines for each family member depends of user id
     @GetMapping("/showTodaysMedicines")
     public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines(@RequestHeader String userId) {
 
-        return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(1L)); // by user id
+        return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(userId)); // by user id
     }
 
     // update medicine instance and active medicine - needs "medicineInstanceId" in json body
@@ -274,18 +293,20 @@ public class MedicineController {
 
         MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
         ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
+        if(medicineInstanceToUpdate.getMedicine().getUser().getId().equals(userId)) {
+            medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
+            updatedActiveMedicine.setAlreadyTaken(updatedActiveMedicine.getAlreadyTaken() + 1);
 
-        medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
-        updatedActiveMedicine.setAlreadyTaken(updatedActiveMedicine.getAlreadyTaken() + 1);
+            if (updatedActiveMedicine.getAlreadyTaken() == updatedActiveMedicine.getQuantityPerDay()) {
+                updatedActiveMedicine.setHidden(true);
+            }
 
-        if (updatedActiveMedicine.getAlreadyTaken() == updatedActiveMedicine.getQuantityPerDay()) {
-            updatedActiveMedicine.setHidden(true);
+            medicineService.saveMedicineInstance(medicineInstanceToUpdate);
+            activeMedicinesService.updateActiveMedicine(updatedActiveMedicine);
+
+            return ResponseEntity.ok("Don't worry! Be happy!");
         }
-
-        medicineService.saveMedicineInstance(medicineInstanceToUpdate);
-        activeMedicinesService.updateActiveMedicine(updatedActiveMedicine);
-
-        return ResponseEntity.ok("Don't worry! Be happy!");
+        return ResponseEntity.notFound().build();
     }
 
 }
