@@ -45,7 +45,7 @@ public class Medicine {
 
     @OneToMany
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
-    private List <MedicineAlternative> alternatives;
+    List <MedicineAlternative> alternatives;
 
     // getters and setters
 
@@ -98,6 +98,9 @@ public class Medicine {
         isAntibiotic = antibiotic;
     }
 
+    public User getUser() {
+        return user;
+    }
 
     public boolean getIsToBuy() {
         return isToBuy;

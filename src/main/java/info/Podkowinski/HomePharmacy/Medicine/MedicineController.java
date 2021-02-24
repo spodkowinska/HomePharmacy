@@ -33,15 +33,22 @@ public class MedicineController {
     }
 
     @PatchMapping(value = "/edit")
-    public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
-        Medicine medicine = medicineService.findById(addMedicineDTO.getId());
-        return editMedicine(addMedicineDTO, medicine);
+    public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader HttpHeaders header) {
+        if (addMedicineDTO.getUserId().equals(header.getFirst("userId"))) {
+            Medicine medicine = medicineService.findById(addMedicineDTO.getId());
+            return editMedicine(addMedicineDTO, medicine);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine, @RequestHeader String userId) {
-        medicineService.deleteMedicine(medicine);
-        return ResponseEntity.ok(HttpStatus.OK);
+    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine, @RequestHeader HttpHeaders header) {
+        String userId = header.getFirst("userId");
+        if (medicine.getUser().getId().equals(userId)) {
+            medicineService.deleteMedicine(medicine);
+            return ResponseEntity.ok(HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/list")
