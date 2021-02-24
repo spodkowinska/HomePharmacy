@@ -27,7 +27,7 @@ public class MedicineService {
         return medicineRepository.findAllByUserId(userId);
     }
     public List<MedicineAlternative> findAlternativesByMedicine(Long medicineId){
-        return medicineAlternativeRepository.findAllByMedicineId(medicineId);
+        return medicineRepository.findById(medicineId).get().getAlternatives();
     }
 
     public Medicine findById(int id){
@@ -50,7 +50,7 @@ public class MedicineService {
     }
 
     public List<MedicineInstance> getInstancesByMedicine(Long medicineId){
-        return medicineInstanceRepository.findAllByMedicineId(medicineId);
+        return medicineInstanceRepository.findAllByMedicine(medicineId);
     }
 
     public List<MedicineInstance> findAllMedicineInstances(){

@@ -3,6 +3,7 @@ package info.Podkowinski.HomePharmacy.Medicine;
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
 import info.Podkowinski.HomePharmacy.Family.FamilyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,9 +45,9 @@ public class MedicineController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<MedicineForDisplayDTO>> listMedicines(@RequestHeader String userId) {
+    public ResponseEntity<List<MedicineForDisplayDTO>> listMedicines(@RequestHeader HttpHeaders header) {
         List<MedicineForDisplayDTO> fullMedicine = new ArrayList<>();
-        List<Medicine> foundMedicine = medicineService.findAllMedicinesByUserId(userId);
+        List<Medicine> foundMedicine = medicineService.findAllMedicinesByUserId(header.getFirst("userId"));
         for (Medicine medicine : foundMedicine){
             MedicineForDisplayDTO newDTO = new MedicineForDisplayDTO();
             newDTO.setId(medicine.getId());

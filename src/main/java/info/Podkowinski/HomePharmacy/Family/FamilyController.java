@@ -27,7 +27,7 @@ public class FamilyController {
         FamilyMember newFamilyMember = new FamilyMember();
 
         newFamilyMember.setName(creatingFamilyMemberDTO.getName());
-        newFamilyMember.setSurname(creatingFamilyMemberDTO.getSurname());
+        newFamilyMember.setNotes(creatingFamilyMemberDTO.getSurname());
         newFamilyMember.setAge(creatingFamilyMemberDTO.getAge());
 
         if (creatingFamilyMemberDTO.getMedicineIds() != null) {
@@ -47,7 +47,7 @@ public class FamilyController {
         FamilyMember editedFamilyMember = familyService.findById(familyMemberId);
 
         editedFamilyMember.setName(editFamilyMemberDTO.getName());
-        editedFamilyMember.setSurname(editFamilyMemberDTO.getSurname());
+        editedFamilyMember.setNotes(editFamilyMemberDTO.getNotes());
         editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
 
         if (editFamilyMemberDTO.getMedicineIds() != null) {
