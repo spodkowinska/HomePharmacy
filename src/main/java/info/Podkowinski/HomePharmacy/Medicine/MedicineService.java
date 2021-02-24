@@ -50,14 +50,23 @@ public class MedicineService {
     public List<MedicineInstance> findLastMedicineInstances(){
         List<MedicineInstance> allMedicineInstances = findAllMedicineInstances();
         List<MedicineInstance> lastMedicineInstances = new ArrayList<>();
+
         Date now = Date.valueOf(LocalDate.now());
         Date future = Date.valueOf(LocalDate.now().plusDays(7));
+
         for (MedicineInstance medicineInstance : allMedicineInstances) {
-            if (medicineInstance.getExpiryDate() != null && medicineInstance.getQuantityLeft() != null) {
-                if (medicineInstance.getQuantityLeft() < 10 || medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) == 1) {
-                    lastMedicineInstances.add(medicineInstance);
+
+//            || (medicineInstance.getQuantityLeft() >= 10 && (medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) == 1))
+
+            if (medicineInstance.getVisible()) {
+                if (medicineInstance.getExpiryDate() != null && medicineInstance.getQuantityLeft() != null) {
+                    if (medicineInstance.getQuantityLeft() < 10 || medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) == 1) {
+                        lastMedicineInstances.add(medicineInstance);
+                    }
                 }
             }
+
+
         }
         List<MedicineInstance> sortedList = new ArrayList<>(lastMedicineInstances);
         sortedList.sort(Comparator.comparing(MedicineInstance::getExpiryDate));
