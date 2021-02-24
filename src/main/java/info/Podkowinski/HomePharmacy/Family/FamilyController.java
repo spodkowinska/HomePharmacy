@@ -30,8 +30,6 @@ public class FamilyController {
         newFamilyMember.setNotes(creatingFamilyMemberDTO.getNotes());
         newFamilyMember.setAge(creatingFamilyMemberDTO.getAge());
 
-        //
-
         if (creatingFamilyMemberDTO.getMedicineIds() != null) {
             List<Integer> medicineIds = creatingFamilyMemberDTO.getMedicineIds();
             newFamilyMember.setMedicines(medicineService.familyMemberMedicinesList(medicineIds));
@@ -56,6 +54,10 @@ public class FamilyController {
         if (editFamilyMemberDTO.getAge() != 0) {
             editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
         }
+
+        editedFamilyMember.setName(editFamilyMemberDTO.getName());
+        editedFamilyMember.setNotes(editFamilyMemberDTO.getNotes());
+        editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
 
         //todo - if user is conected with medicine and you add the same medicine it will add new row in table
 

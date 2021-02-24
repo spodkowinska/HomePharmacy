@@ -34,6 +34,7 @@ public class Medicine {
 
     private boolean isToBuy;
 
+    @Column(name = "alternative_searched", columnDefinition = "boolean default true")
     private boolean alternativeSearched;
 
     private Double officialPrice;
