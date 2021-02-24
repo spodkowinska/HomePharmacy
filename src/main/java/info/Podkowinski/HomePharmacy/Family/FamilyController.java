@@ -27,7 +27,7 @@ public class FamilyController {
         FamilyMember newFamilyMember = new FamilyMember();
 
         newFamilyMember.setName(creatingFamilyMemberDTO.getName());
-        newFamilyMember.setNotes(creatingFamilyMemberDTO.getSurname());
+        newFamilyMember.setNotes(creatingFamilyMemberDTO.getNotes());
         newFamilyMember.setAge(creatingFamilyMemberDTO.getAge());
 
         if (creatingFamilyMemberDTO.getMedicineIds() != null) {
@@ -39,19 +39,31 @@ public class FamilyController {
         return "redirect:/family";
     }
 
-    @PutMapping(value = "/family/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/family/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public String editFamilyMember(@RequestBody EditFamilyMemberDTO editFamilyMemberDTO) {
 
         int familyMemberId = editFamilyMemberDTO.getId();
 
         FamilyMember editedFamilyMember = familyService.findById(familyMemberId);
+        if (editFamilyMemberDTO.getName() != null) {
+            editedFamilyMember.setName(editFamilyMemberDTO.getName());
+        }
+        if (editFamilyMemberDTO.getNotes() != null) {
+            editedFamilyMember.setNotes(editFamilyMemberDTO.getNotes());
+        }
+        if (editFamilyMemberDTO.getAge() != 0) {
+            editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
+        }
 
         editedFamilyMember.setName(editFamilyMemberDTO.getName());
         editedFamilyMember.setNotes(editFamilyMemberDTO.getNotes());
         editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
 
+        //todo - if user is conected with medicine and you add the same medicine it will add new row in table
+
         if (editFamilyMemberDTO.getMedicineIds() != null) {
             List<Integer> medicineIds = editFamilyMemberDTO.getMedicineIds();
+            editedFamilyMember.getMedicines().forEach(medicine -> medicineIds.add(Math.toIntExact(medicine.getId())));
             editedFamilyMember.setMedicines(medicineService.familyMemberMedicinesList(medicineIds));
         }
 

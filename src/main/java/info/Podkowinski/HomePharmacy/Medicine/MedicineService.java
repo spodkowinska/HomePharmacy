@@ -76,7 +76,7 @@ public class MedicineService {
         List<MedicineInstance> sortedList = new ArrayList<>(lastMedicineInstances);
         sortedList.sort(Comparator.comparing(MedicineInstance::getExpiryDate));
         if (sortedList.size() > 16) {
-            return sortedList.subList(sortedList.size() -16, sortedList.size());
+            return sortedList.subList(sortedList.size() - 16, sortedList.size());
         } else {
             return sortedList;
         }

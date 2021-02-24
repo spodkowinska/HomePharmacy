@@ -27,7 +27,7 @@ public class MedicineController {
     private FamilyService familyService;
 
     @PostMapping("/add")
-    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
+    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
         Medicine medicine = new Medicine();
         return saveMedicine(addMedicineDTO, medicine);
     }
@@ -293,7 +293,7 @@ public class MedicineController {
 
         MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
         ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
-        if(medicineInstanceToUpdate.getMedicine().getUser().getId().equals(userId)) {
+        if (medicineInstanceToUpdate.getMedicine().getUser().getId().equals(userId)) {
             medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
             updatedActiveMedicine.setAlreadyTaken(updatedActiveMedicine.getAlreadyTaken() + 1);
 
@@ -304,9 +304,8 @@ public class MedicineController {
             medicineService.saveMedicineInstance(medicineInstanceToUpdate);
             activeMedicinesService.updateActiveMedicine(updatedActiveMedicine);
 
-            return ResponseEntity.ok("Don't worry! Be happy!");
+            return ResponseEntity.ok("Active medicine updated successfully!");
         }
         return ResponseEntity.notFound().build();
     }
-
 }

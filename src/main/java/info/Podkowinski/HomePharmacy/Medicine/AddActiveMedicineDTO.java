@@ -12,6 +12,8 @@ public class AddActiveMedicineDTO {
 
     private Long medicineInstanceId;
 
+    private MedicineInstance medicineInstance;
+
     private Long familyMemberId;
 
     private Integer quantityPerDay;
@@ -29,12 +31,13 @@ public class AddActiveMedicineDTO {
     private String userId;
 
 
-    public AddActiveMedicineDTO(Integer id, Long medicineInstanceId,
+    public AddActiveMedicineDTO(Integer id, Long medicineInstanceId, MedicineInstance medicineInstance,
                                 Long familyMemberId, LocalDate eatAtDate,
                                 Integer quantityPerDay, Integer howOften, Integer alreadyTaken,
                                 boolean hidden, boolean allTakenOnTime, String userId) {
         this.id = id;
         this.medicineInstanceId = medicineInstanceId;
+        this.medicineInstance = medicineInstance;
         this.familyMemberId = familyMemberId;
         this.eatAtDate = eatAtDate;
         this.quantityPerDay = quantityPerDay;
@@ -61,6 +64,14 @@ public class AddActiveMedicineDTO {
 
     public void setMedicineInstanceId(Long medicineInstanceId) {
         this.medicineInstanceId = medicineInstanceId;
+    }
+
+    public MedicineInstance getMedicineInstance() {
+        return medicineInstance;
+    }
+
+    public void setMedicineInstance(MedicineInstance medicineInstance) {
+        this.medicineInstance = medicineInstance;
     }
 
     public Long getFamilyMemberId() {
