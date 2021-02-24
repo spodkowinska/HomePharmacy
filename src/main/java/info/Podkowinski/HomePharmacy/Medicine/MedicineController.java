@@ -29,64 +29,26 @@ public class MedicineController {
     @PostMapping("/add")
     public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
         Medicine medicine = new Medicine();
-        return saveMedicine(addMedicineDTO, medicine);
+
+        medicine.setUserId(userId);
+        medicine.setName(addMedicineDTO.getName());
+//        medicine.setIsToBuy(addMedicineDTO.getIsToBuy());  should it be here?
+        medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
+        medicine.setIsAntibiotic(addMedicineDTO.getIsAntibiotic());
+//        medicine.setDescription(addMedicineDTO.getDescription()); so finally description should be found by
+        medicine.setNotes(addMedicineDTO.getNotes());
+        medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
+        medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
+//        medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice()); do we need it?
+
+        medicineService.saveMedicine(medicine);
+        return ResponseEntity.ok("New medicine has been added successfully!");
     }
 
     @PatchMapping(value = "/edit")
     public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
         Medicine medicine = medicineService.findById(addMedicineDTO.getId());
-        return editMedicine(addMedicineDTO, medicine);
-    }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine, @RequestHeader String userId) {
-        medicineService.deleteMedicine(medicine);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity<List<MedicineForDisplayDTO>> listMedicines(@RequestHeader HttpHeaders header) {
-        List<MedicineForDisplayDTO> fullMedicine = new ArrayList<>();
-        List<Medicine> foundMedicine = medicineService.findAllMedicinesByUserId(header.getFirst("userId"));
-        for (Medicine medicine : foundMedicine){
-            MedicineForDisplayDTO newDTO = new MedicineForDisplayDTO();
-            newDTO.setId(medicine.getId());
-            newDTO.setDescription(medicine.getDescription());
-            newDTO.setName(medicine.getName());
-            newDTO.setAntibiotic(medicine.getIsAntibiotic());
-            newDTO.setSteroid(medicine.getIsSteroid());
-            newDTO.setPrescriptionNeeded(medicine.getIsPrescriptionNeeded());
-            newDTO.setVitamin(medicine.getIsVitamin());
-            List<FamilyMember>familyMembers = new ArrayList<>();
-            medicineService.getInstancesByMedicine(medicine.getId()).forEach(p->familyMembers.add(p.getWhomWasItPrescribed()));
-            newDTO.setFamilyMembers(familyMembers);
-            List<MedicineAlternative> alternatives = new ArrayList<>();
-            alternatives.addAll(medicineService.findAlternativesByMedicine(medicine.getId()));
-            newDTO.setAlternatives(alternatives);
-        }
-
-        if (fullMedicine == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(fullMedicine);
-        }
-    }
-
-    public ResponseEntity saveMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
-        medicine.setName(addMedicineDTO.getName());
-        medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
-        medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
-        medicine.setIsAntibiotic(addMedicineDTO.getIsAntibiotic());
-        medicine.setDescription(addMedicineDTO.getDescription());
-        medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
-        medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
-        medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
-
-        medicineService.saveMedicine(medicine);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    public ResponseEntity editMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
         if (addMedicineDTO.getName() != null) {
             if (!addMedicineDTO.getName().equals(medicine.getName())) {
                 medicine.setName(addMedicineDTO.getName());
@@ -106,6 +68,11 @@ public class MedicineController {
                 medicine.setDescription(addMedicineDTO.getDescription());
             }
         }
+
+        if (addMedicineDTO.getNotes() != medicine.getNotes()) {
+            medicine.setNotes(addMedicineDTO.getNotes());
+        }
+
         if (addMedicineDTO.getIsSteroid() != medicine.getIsSteroid()) {
             medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
         }
@@ -119,7 +86,107 @@ public class MedicineController {
         }
         medicineService.saveMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
+
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine, @RequestHeader String userId) {
+        medicineService.deleteMedicine(medicine);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<MedicineForDisplayDTO>> listMedicines(@RequestHeader HttpHeaders header) {
+
+        List<MedicineForDisplayDTO> fullMedicine = new ArrayList<>();
+        List<Medicine> foundMedicine = medicineService.findAllMedicinesByUserId(header.getFirst("userId"));
+
+        for (Medicine medicine : foundMedicine){
+            System.out.println(medicine.getIsToBuy());
+            MedicineForDisplayDTO newDTO = new MedicineForDisplayDTO();
+
+            newDTO.setId(medicine.getId());
+            newDTO.setDescription(medicine.getDescription());
+            newDTO.setName(medicine.getName());
+            newDTO.setAntibiotic(medicine.getIsAntibiotic());
+            newDTO.setSteroid(medicine.getIsSteroid());
+            newDTO.setPrescriptionNeeded(medicine.getIsPrescriptionNeeded());
+            newDTO.setVitamin(medicine.getIsVitamin());
+            newDTO.setIsToBuy(medicine.getIsToBuy());
+            newDTO.setNotes(medicine.getNotes());
+
+            List<FamilyMember>familyMembers = new ArrayList<>();
+
+            if (medicineService.checkIfExistsById(medicine.getId())) {
+                medicineService.getInstancesByMedicine(medicine.getId()).forEach(p->familyMembers.add(p.getWhomWasItPrescribed()));
+                newDTO.setFamilyMembers(familyMembers);
+            }
+
+            List<MedicineAlternative> alternatives = new ArrayList<>();
+
+            if (medicineService.findAlternativesByMedicine(medicine.getId()).size() > 0) {
+                alternatives.addAll(medicineService.findAlternativesByMedicine(medicine.getId()));
+                newDTO.setAlternatives(alternatives);
+            }
+
+            fullMedicine.add(newDTO);
+        }
+
+        if (fullMedicine == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(fullMedicine);
+        }
+    }
+
+//    public ResponseEntity saveMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
+//        medicine.setName(addMedicineDTO.getName());
+//        medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
+//        medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
+//        medicine.setIsAntibiotic(addMedicineDTO.getIsAntibiotic());
+//        medicine.setDescription(addMedicineDTO.getDescription());
+//        medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
+//        medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
+//        medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+//
+//        medicineService.saveMedicine(medicine);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
+
+//    public ResponseEntity editMedicine(AddMedicineDTO addMedicineDTO, Medicine medicine) {
+//        if (addMedicineDTO.getName() != null) {
+//            if (!addMedicineDTO.getName().equals(medicine.getName())) {
+//                medicine.setName(addMedicineDTO.getName());
+//            }
+//        }
+//        if (addMedicineDTO.getIsToBuy() != medicine.getIsToBuy()) {
+//            medicine.setIsToBuy(addMedicineDTO.getIsToBuy());
+//        }
+//        if (addMedicineDTO.getIsPrescriptionNeeded() != medicine.getIsPrescriptionNeeded()) {
+//            medicine.setIsPrescriptionNeeded(addMedicineDTO.getIsPrescriptionNeeded());
+//        }
+//        if (addMedicineDTO.getIsAntibiotic() != medicine.getIsAntibiotic()) {
+//            medicine.setIsAntibiotic(addMedicineDTO.getIsSteroid());
+//        }
+//        if (addMedicineDTO.getDescription() != null) {
+//            if (!addMedicineDTO.getDescription().equals(medicine.getDescription())) {
+//                medicine.setDescription(addMedicineDTO.getDescription());
+//            }
+//        }
+//        if (addMedicineDTO.getIsSteroid() != medicine.getIsSteroid()) {
+//            medicine.setIsSteroid(addMedicineDTO.getIsSteroid());
+//        }
+//        if (addMedicineDTO.getIsVitamin() != medicine.getIsVitamin()) {
+//            medicine.setIsVitamin(addMedicineDTO.getIsVitamin());
+//        }
+//        if (addMedicineDTO.getOfficialPrice()!=null) {
+//            if (!addMedicineDTO.getOfficialPrice().equals(medicine.getOfficialPrice())) {
+//                medicine.setOfficialPrice(addMedicineDTO.getOfficialPrice());
+//            }
+//        }
+//        medicineService.saveMedicine(medicine);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
 
     //MedicineInstance mappings
 
@@ -217,6 +284,7 @@ public class MedicineController {
 
     @GetMapping("/showWishlist")
     public ResponseEntity<List<Medicine>> showWishlist(@RequestHeader String userId) {
+        System.out.println(userId);
         List<Medicine> wishlist = medicineService.showWishList();
         if (wishlist == null) {
             return ResponseEntity.notFound().build();
@@ -243,7 +311,13 @@ public class MedicineController {
         activeMedicine.setEatAtDate(addActiveMedicineDTO.getEatAtDate()); // start eating pill from date - format yyyy-mm-dd
         activeMedicine.setQuantityPerDay(addActiveMedicineDTO.getQuantityPerDay()); // how many pills should be eaten per day
         activeMedicine.setHowOften(addActiveMedicineDTO.getHowOften()); // information in days
-        activeMedicine.setAlreadyTaken(addActiveMedicineDTO.getAlreadyTaken()); // json default value is 0 but user can choose if he/she already ate some pills
+
+        if (addActiveMedicineDTO.getAlreadyTaken() == null) {
+            activeMedicine.setAlreadyTaken(0);
+        } else {
+            activeMedicine.setAlreadyTaken(addActiveMedicineDTO.getAlreadyTaken()); // json default value is 0 but user can choose if he/she already ate some pills
+        }
+
         activeMedicine.setHidden(addActiveMedicineDTO.isHidden()); // default value should be false - hidden true is after each pill has been eaten at actual day
         activeMedicine.setAllTakenOnTime(addActiveMedicineDTO.isAllTakenOnTime()); // default value should be true and then if user didn't took all pills on time it will be changed to false
 
@@ -256,7 +330,7 @@ public class MedicineController {
     @GetMapping("/showTodaysMedicines")
     public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines(@RequestHeader String userId) {
 
-        return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(1L)); // by user id
+        return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines("1")); // by user id
     }
 
     // update medicine instance and active medicine - needs "medicineInstanceId" in json body

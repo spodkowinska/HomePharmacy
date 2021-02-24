@@ -49,6 +49,10 @@ public class MedicineService {
 
     }
 
+    public boolean checkIfExistsById(Long medicineId) {
+        return medicineInstanceRepository.existsById(medicineId);
+    }
+
     public List<MedicineInstance> getInstancesByMedicine(Long medicineId){
         return medicineInstanceRepository.findAllByMedicine(medicineId);
     }

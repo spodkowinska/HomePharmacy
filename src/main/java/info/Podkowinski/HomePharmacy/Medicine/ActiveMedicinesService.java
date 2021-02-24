@@ -38,7 +38,7 @@ public class ActiveMedicinesService {
         return medicineInstanceRepository.findById(id).orElse(null);
     }
 
-    public List<ActiveMedicines> getTodaysMedicines(Long id) {
+    public List<ActiveMedicines> getTodaysMedicines(String id) {
 
         List<ActiveMedicines> activeMedicines = activeMedicinesRepository.findByUserId(id);
         List<ActiveMedicines> todaysMedicines = new ArrayList<ActiveMedicines>();
