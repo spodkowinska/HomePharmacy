@@ -3,6 +3,7 @@ package info.Podkowinski.HomePharmacy.Family;
 
 
 import info.Podkowinski.HomePharmacy.Medicine.Medicine;
+import info.Podkowinski.HomePharmacy.User.User;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,6 +32,9 @@ public class FamilyMember {
     @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "medicine_id")
     private List<Medicine> medicines;
+
+    @ManyToOne
+    private User user;
 
     public Long getId() { return id; }
 

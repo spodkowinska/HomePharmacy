@@ -34,6 +34,8 @@ public class Medicine {
 
     private boolean isToBuy;
 
+    private boolean alternativeSearched;
+
     private Double officialPrice;
 
 //    @ManyToOne(optional = false)
@@ -122,6 +124,14 @@ public class Medicine {
 
     public List<MedicineAlternative> getAlternatives() {
         return alternatives;
+    }
+
+    public boolean isAlternativeSearched() {
+        return alternativeSearched;
+    }
+
+    public void setAlternativeSearched(boolean alternativeSearched) {
+        this.alternativeSearched = alternativeSearched;
     }
 
     public void setAlternatives(List<MedicineAlternative> alternatives) {
