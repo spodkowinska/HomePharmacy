@@ -27,7 +27,7 @@ public class FamilyController {
         FamilyMember newFamilyMember = new FamilyMember();
 
         newFamilyMember.setName(creatingFamilyMemberDTO.getName());
-        newFamilyMember.setSurname(creatingFamilyMemberDTO.getSurname());
+        newFamilyMember.setNotes(creatingFamilyMemberDTO.getNotes());
         newFamilyMember.setAge(creatingFamilyMemberDTO.getAge());
 
         //
@@ -41,16 +41,21 @@ public class FamilyController {
         return "redirect:/family";
     }
 
-    @PutMapping(value = "/family/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/family/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public String editFamilyMember(@RequestBody EditFamilyMemberDTO editFamilyMemberDTO) {
 
         int familyMemberId = editFamilyMemberDTO.getId();
 
         FamilyMember editedFamilyMember = familyService.findById(familyMemberId);
-
-        editedFamilyMember.setName(editFamilyMemberDTO.getName());
-        editedFamilyMember.setSurname(editFamilyMemberDTO.getSurname());
-        editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
+        if (editFamilyMemberDTO.getName() != null) {
+            editedFamilyMember.setName(editFamilyMemberDTO.getName());
+        }
+        if (editFamilyMemberDTO.getNotes() != null) {
+            editedFamilyMember.setNotes(editFamilyMemberDTO.getNotes());
+        }
+        if (editFamilyMemberDTO.getAge() != 0) {
+            editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
+        }
 
         //todo - if user is conected with medicine and you add the same medicine it will add new row in table
 

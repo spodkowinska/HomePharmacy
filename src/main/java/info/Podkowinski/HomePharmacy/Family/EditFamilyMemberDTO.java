@@ -5,14 +5,14 @@ import java.util.List;
 public class EditFamilyMemberDTO {
     private int id;
     private String name;
-    private String surname;
+    private String notes;
     private int age;
     private List<Integer> medicineIds;
 
-    public EditFamilyMemberDTO(int id, String name, String surname, int age, List<Integer> medicineIds) {
+    public EditFamilyMemberDTO(int id, String name, String notes, int age, List<Integer> medicineIds) {
         this.id = id;
         this.name = name;
-        this.surname = surname;
+        this.notes = notes;
         this.age = age;
         this.medicineIds = medicineIds;
     }
@@ -33,12 +33,12 @@ public class EditFamilyMemberDTO {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public int getAge() {

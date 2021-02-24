@@ -18,7 +18,7 @@ public class FamilyMember {
     private Long id;
 
     private String name;
-    private String surname;
+    private String notes;
     private int age;
 
     public List<Medicine> getMedicines() {
@@ -44,9 +44,9 @@ public class FamilyMember {
 
     public void setName(String name) { this.name = name; }
 
-    public String getSurname() { return surname; }
+    public String getNotes() { return notes; }
 
-    public void setSurname(String surname) { this.surname = surname; }
+    public void setNotes(String notes) { this.notes = notes; }
 
     public int getAge() { return age; }
 
