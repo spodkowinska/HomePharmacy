@@ -16,13 +16,18 @@ public class MedicineService {
     private MedicineRepository medicineRepository;
     @Autowired
     private MedicineInstanceRepository medicineInstanceRepository;
+    @Autowired
+    private MedicineAlternativeRepository medicineAlternativeRepository;
 
     public void saveMedicine(Medicine medicine){
         medicineRepository.save(medicine);
     }
 
-    public List<Medicine> findAllMedicines(){
-        return medicineRepository.findAll();
+    public List<Medicine> findAllMedicinesByUserId(String userId){
+        return medicineRepository.findAllByUserId(userId);
+    }
+    public List<MedicineAlternative> findAlternativesByMedicine(Long medicineId){
+        return medicineAlternativeRepository.findAllByMedicineId(medicineId);
     }
 
     public Medicine findById(int id){
@@ -36,11 +41,16 @@ public class MedicineService {
     public void deleteMedicine(Medicine medicine) { medicineRepository.delete(medicine);}
 
 
+
     //MedicineInstance service
 
     public void saveMedicineInstance(MedicineInstance medicineInstance){
         medicineInstanceRepository.save(medicineInstance);
 
+    }
+
+    public List<MedicineInstance> getInstancesByMedicine(Long medicineId){
+        return medicineInstanceRepository.findAllByMedicineId(medicineId);
     }
 
     public List<MedicineInstance> findAllMedicineInstances(){

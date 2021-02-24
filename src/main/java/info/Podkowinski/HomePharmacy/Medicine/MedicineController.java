@@ -1,12 +1,14 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
+import info.Podkowinski.HomePharmacy.Family.FamilyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,31 +22,52 @@ public class MedicineController {
     @Autowired
     private ActiveMedicinesService activeMedicinesService;
 
+    @Autowired
+    private FamilyService familyService;
+
     @PostMapping("/add")
-    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
+    public ResponseEntity addMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
         Medicine medicine = new Medicine();
         return saveMedicine(addMedicineDTO, medicine);
     }
 
     @PatchMapping(value = "/edit")
-    public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO) {
+    public ResponseEntity editMedicine(@RequestBody AddMedicineDTO addMedicineDTO, @RequestHeader String userId) {
         Medicine medicine = medicineService.findById(addMedicineDTO.getId());
         return editMedicine(addMedicineDTO, medicine);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine) {
+    public ResponseEntity deleteMedicine(@RequestBody Medicine medicine, @RequestHeader String userId) {
         medicineService.deleteMedicine(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Medicine>> listMedicines() {
-        List<Medicine> foundMedicine = medicineService.findAllMedicines();
-        if (foundMedicine == null) {
+    public ResponseEntity<List<MedicineForDisplayDTO>> listMedicines(@RequestHeader String userId) {
+        List<MedicineForDisplayDTO> fullMedicine = new ArrayList<>();
+        List<Medicine> foundMedicine = medicineService.findAllMedicinesByUserId(userId);
+        for (Medicine medicine : foundMedicine){
+            MedicineForDisplayDTO newDTO = new MedicineForDisplayDTO();
+            newDTO.setId(medicine.getId());
+            newDTO.setDescription(medicine.getDescription());
+            newDTO.setName(medicine.getName());
+            newDTO.setAntibiotic(medicine.getIsAntibiotic());
+            newDTO.setSteroid(medicine.getIsSteroid());
+            newDTO.setPrescriptionNeeded(medicine.getIsPrescriptionNeeded());
+            newDTO.setVitamin(medicine.getIsVitamin());
+            List<FamilyMember>familyMembers = new ArrayList<>();
+            medicineService.getInstancesByMedicine(medicine.getId()).forEach(p->familyMembers.add(p.getWhomWasItPrescribed()));
+            newDTO.setFamilyMembers(familyMembers);
+            List<MedicineAlternative> alternatives = new ArrayList<>();
+            alternatives.addAll(medicineService.findAlternativesByMedicine(medicine.getId()));
+            newDTO.setAlternatives(alternatives);
+        }
+
+        if (fullMedicine == null) {
             return ResponseEntity.notFound().build();
         } else {
-            return ResponseEntity.ok(foundMedicine);
+            return ResponseEntity.ok(fullMedicine);
         }
     }
 
@@ -100,31 +123,31 @@ public class MedicineController {
     //MedicineInstance mappings
 
     @PostMapping("/addInstance")
-    public ResponseEntity addMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO) {
+    public ResponseEntity addMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO, @RequestHeader String userId) {
         MedicineInstance medicineInstance = new MedicineInstance();
         return saveMedicineInstance(addMedicineInstanceDTO, medicineInstance);
     }
 
     @PatchMapping("/editInstance")
-    public ResponseEntity editMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO) {
+    public ResponseEntity editMedicineInstance(@RequestBody AddMedicineInstanceDTO addMedicineInstanceDTO, @RequestHeader String userId) {
         MedicineInstance medicineInstance = medicineService.findMedicineInstanceById(addMedicineInstanceDTO.getId());
         return editMedicineInstance(addMedicineInstanceDTO, medicineInstance);
     }
 
     @DeleteMapping("/deleteInstance")
-    public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance) {
+    public ResponseEntity deleteMedicineInstance(@RequestBody MedicineInstance medicineInstance, @RequestHeader String userId) {
         medicineService.deleteMedicineInstance(medicineInstance.getId());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAllInstances")
-    public ResponseEntity deleteAllInstances(@RequestBody Medicine medicine) {
+    public ResponseEntity deleteAllInstances(@RequestBody Medicine medicine, @RequestHeader String userId) {
         medicineService.deleteAllMedicineInstances(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/listInstances")
-    public ResponseEntity<List<MedicineInstance>> listInstances() {
+    public ResponseEntity<List<MedicineInstance>> listInstances(@RequestHeader String userId) {
         List<MedicineInstance> foundMedicineInstances = medicineService.findAllMedicineInstances();
         if (foundMedicineInstances == null) {
             return ResponseEntity.notFound().build();
@@ -134,14 +157,14 @@ public class MedicineController {
     }
 
     @PatchMapping("/setInstanceHidden")
-    public ResponseEntity setInstanceHidden(@RequestBody MedicineInstance medicineInstance) {
+    public ResponseEntity setInstanceHidden(@RequestBody MedicineInstance medicineInstance, @RequestHeader String userId) {
         medicineService.setMedicineInstanceHidden(medicineInstance);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     //lists last 15 Medicine Instances if quantityLeft < 10 or expiryDate < 7 days from now or earlier sorted by expiryDate
     @GetMapping("/listLastInstances")
-    public ResponseEntity<List<MedicineInstance>> listLastInstances() {
+    public ResponseEntity<List<MedicineInstance>> listLastInstances(@RequestHeader String userId) {
         List<MedicineInstance> foundMedicineInstances = medicineService.findLastMedicineInstances();
         if (foundMedicineInstances == null) {
             return ResponseEntity.notFound().build();
@@ -185,14 +208,14 @@ public class MedicineController {
     //wishlist mapping
 
     @PatchMapping("/addToWishlist")
-    public ResponseEntity addToWishList(@RequestBody Medicine medicine) {
+    public ResponseEntity addToWishList(@RequestBody Medicine medicine, @RequestHeader String userId) {
         medicineService.addToWishList(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
     @GetMapping("/showWishlist")
-    public ResponseEntity<List<Medicine>> showWishlist() {
+    public ResponseEntity<List<Medicine>> showWishlist(@RequestHeader String userId) {
         List<Medicine> wishlist = medicineService.showWishList();
         if (wishlist == null) {
             return ResponseEntity.notFound().build();
@@ -202,7 +225,7 @@ public class MedicineController {
     }
 
     @PatchMapping("/removeFromWishlist")
-    public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine) {
+    public ResponseEntity removeFromWishlist(@RequestBody Medicine medicine, @RequestHeader String userId) {
         medicineService.removeFromWishlist(medicine);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -211,7 +234,7 @@ public class MedicineController {
 
     // adding active medicine - information about data that should be passed by json is below
     @PostMapping("/addActiveMedicine")
-    public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO) {
+    public ResponseEntity addActiveMedicine(@RequestBody AddActiveMedicineDTO addActiveMedicineDTO, @RequestHeader String userId) {
         ActiveMedicines activeMedicine = new ActiveMedicines();
 
         activeMedicine.setFamilyMember(activeMedicinesService.findById(addActiveMedicineDTO.getFamilyMemberId())); // family member that should be connected to active medicine
@@ -230,7 +253,7 @@ public class MedicineController {
 
     // returns list of todays medicines for each family member depends of user id
     @GetMapping("/showTodaysMedicines")
-    public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines() {
+    public ResponseEntity<List<ActiveMedicines>> showTodaysMedicines(@RequestHeader String userId) {
 
         return ResponseEntity.ok(activeMedicinesService.getTodaysMedicines(1L)); // by user id
     }
@@ -239,7 +262,7 @@ public class MedicineController {
     // to set medicine instance quantity left -1 and active medicine already taken + 1
     // works for each request
     @PatchMapping("/updateActiveMedicineInstance")
-    public ResponseEntity updateActiveMedicineInstance(@RequestBody AddActiveMedicineDTO updateMedicineInstance) {
+    public ResponseEntity updateActiveMedicineInstance(@RequestBody AddActiveMedicineDTO updateMedicineInstance, @RequestHeader String userId) {
 
         MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
         ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
