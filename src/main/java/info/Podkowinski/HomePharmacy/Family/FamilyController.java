@@ -2,12 +2,14 @@ package info.Podkowinski.HomePharmacy.Family;
 
 import info.Podkowinski.HomePharmacy.Medicine.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FamilyController {
 
     @Autowired
@@ -17,8 +19,11 @@ public class FamilyController {
     private MedicineService medicineService;
 
     @GetMapping("/family")
-    public List<FamilyMember> familyHomePage(){
-        return familyService.findAll();
+    public List<FamilyMember> familyHomePage(@RequestHeader HttpHeaders header){
+
+        List<FamilyMember> foundFamilyMembers = familyService.findAllFamilyMembersByUserId(header.getFirst("userId"));
+
+        return foundFamilyMembers;
     }
 
     @PostMapping(value = "/family/add", produces = MediaType.APPLICATION_JSON_VALUE)
