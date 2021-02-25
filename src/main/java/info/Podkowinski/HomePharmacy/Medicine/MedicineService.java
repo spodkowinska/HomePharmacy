@@ -49,15 +49,24 @@ public class MedicineService {
 
     }
 
+    public boolean checkIfExistsById(Long medicineId) {
+        return medicineInstanceRepository.existsById(medicineId);
+    }
+
     public List<MedicineInstance> getInstancesByMedicine(Long medicineId){
-        return medicineInstanceRepository.findAllByMedicine(medicineId);
+        return medicineInstanceRepository.findAllByMedicineId(medicineId);
     }
 
     public List<MedicineInstance> findAllMedicineInstancesByUser(String userId){
         List<Long>medicineIds = new ArrayList<>();
         List<MedicineInstance> instances = new ArrayList<>();
         medicineRepository.findAllByUserId(userId).forEach(m->medicineIds.add(m.getId()));
-        medicineIds.forEach(i->instances.addAll(medicineInstanceRepository.findAllByMedicine(i)));
+
+        System.out.println(medicineIds.size());
+
+//        if (medicineIds.forEach(i-> medicineInstanceRepository.exists());)
+
+        medicineIds.forEach(i->instances.addAll(medicineInstanceRepository.findAllByMedicineId(i)));
     return instances;
     }
 
@@ -67,8 +76,10 @@ public class MedicineService {
         Date now = Date.valueOf(LocalDate.now());
         Date future = Date.valueOf(LocalDate.now().plusDays(7));
         for (MedicineInstance medicineInstance : allMedicineInstances) {
-            if (medicineInstance.getExpiryDate() != null && medicineInstance.getQuantityLeft() != null) {
-                if (medicineInstance.getQuantityLeft() < 10 || medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) == 1) {
+            if (medicineInstance.getExpiryDate() != null && medicineInstance.getQuantityLeft() != null && medicineInstance.getVisible()) {
+                if (medicineInstance.getQuantityLeft() < 10) {
+                    lastMedicineInstances.add(medicineInstance);
+                } else if (medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) < 0) {
                     lastMedicineInstances.add(medicineInstance);
                 }
             }
@@ -76,11 +87,32 @@ public class MedicineService {
         List<MedicineInstance> sortedList = new ArrayList<>(lastMedicineInstances);
         sortedList.sort(Comparator.comparing(MedicineInstance::getExpiryDate));
         if (sortedList.size() > 16) {
-            return sortedList.subList(sortedList.size() - 16, sortedList.size());
+            return sortedList.subList(sortedList.size() -16, sortedList.size());
         } else {
             return sortedList;
         }
     }
+
+//    public List<MedicineInstance> findLastMedicineInstances(String userId){
+//        List<MedicineInstance> allMedicineInstances = findAllMedicineInstancesByUser(userId);
+//        List<MedicineInstance> lastMedicineInstances = new ArrayList<>();
+//        Date now = Date.valueOf(LocalDate.now());
+//        Date future = Date.valueOf(LocalDate.now().plusDays(7));
+//        for (MedicineInstance medicineInstance : allMedicineInstances) {
+//            if (medicineInstance.getExpiryDate() != null && medicineInstance.getQuantityLeft() != null) {
+//                if (medicineInstance.getQuantityLeft() < 10 || medicineInstance.getExpiryDate().before(now) || medicineInstance.getExpiryDate().compareTo(future) == 1) {
+//                    lastMedicineInstances.add(medicineInstance);
+//                }
+//            }
+//        }
+//        List<MedicineInstance> sortedList = new ArrayList<>(lastMedicineInstances);
+//        sortedList.sort(Comparator.comparing(MedicineInstance::getExpiryDate));
+//        if (sortedList.size() > 16) {
+//            return sortedList.subList(sortedList.size() - 16, sortedList.size());
+//        } else {
+//            return sortedList;
+//        }
+//    }
 
     public MedicineInstance findMedicineInstanceById(int id){
         return medicineInstanceRepository.getOne((long) id);

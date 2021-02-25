@@ -31,7 +31,9 @@ public class MedicineForDisplayDTO {
 
     private List<MedicineAlternative> alternatives;
 
-    public MedicineForDisplayDTO(Long id, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice, List<FamilyMember> familyMembers, List<MedicineAlternative> alternatives) {
+    private String notes;
+
+    public MedicineForDisplayDTO(Long id, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice, List<FamilyMember> familyMembers, List<MedicineAlternative> alternatives, String notes) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,6 +45,7 @@ public class MedicineForDisplayDTO {
         this.officialPrice = officialPrice;
         this.familyMembers = familyMembers;
         this.alternatives = alternatives;
+        this.notes = notes;
     }
 
 
@@ -104,12 +107,12 @@ public class MedicineForDisplayDTO {
         isVitamin = vitamin;
     }
 
-    public boolean isToBuy() {
+    public boolean getIsToBuy() {
         return isToBuy;
     }
 
-    public void setToBuy(boolean toBuy) {
-        isToBuy = toBuy;
+    public void setIsToBuy(boolean isToBuy) {
+        this.isToBuy = isToBuy;
     }
 
     public Double getOfficialPrice() {
@@ -135,4 +138,8 @@ public class MedicineForDisplayDTO {
     public void setAlternatives(List<MedicineAlternative> alternatives) {
         this.alternatives = alternatives;
     }
+
+    public String getNotes() { return notes; }
+
+    public void setNotes(String notes) { this.notes = notes; }
 }

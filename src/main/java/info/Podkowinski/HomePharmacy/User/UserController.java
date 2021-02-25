@@ -19,12 +19,12 @@ public class UserController {
         model.addAttribute("member", new User());
         return "User/user-edit";
     }
-    @GetMapping("/edit/{id}")
-    public String editMember(@PathVariable int id, Model model){
-        User userToEdit = userService.findById(id);
-        model.addAttribute("member", userToEdit);
-        return "User/user-edit";
-    }
+//    @GetMapping("/edit/{id}")
+//    public String editMember(@PathVariable int id, Model model){
+//        User userToEdit = userService.findById(id);
+//        model.addAttribute("member", userToEdit);
+//        return "User/user-edit";
+//    }
     @PostMapping("/edit")
     public String editMemberPost(@ModelAttribute User user, Model model){
         userService.save(user);
@@ -36,10 +36,10 @@ public class UserController {
         model.addAttribute("members", userService.findAll());
         return "User/user-list";
     }
-    @GetMapping("/delete/{id}")
-    public String deleteMember(@PathVariable int id, Model model){
-        userService.deleteById(id);
-        model.addAttribute("members", userService.findAll());
-        return "redirect:/listOfMembers";
-    }
+//    @GetMapping("/delete/{id}")
+//    public String deleteMember(@PathVariable int id, Model model){
+//        userService.deleteById(id);
+//        model.addAttribute("members", userService.findAll());
+//        return "redirect:/listOfMembers";
+//    }
 }

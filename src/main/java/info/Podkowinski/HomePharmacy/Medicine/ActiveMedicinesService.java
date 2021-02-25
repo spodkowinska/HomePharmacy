@@ -77,8 +77,4 @@ public class ActiveMedicinesService {
         }
         return todaysMedicines;
     }
-
-//    public void updateActiveMedicineInstance(Long id) {
-//
-//    }
 }
