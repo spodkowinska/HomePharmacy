@@ -38,9 +38,9 @@ public class ActiveMedicinesService {
         return medicineInstanceRepository.findById(id).orElse(null);
     }
 
-    public List<ActiveMedicines> getTodaysMedicines(String id) {
+    public List<ActiveMedicines> getTodaysMedicines(String userId) {
 
-        List<ActiveMedicines> activeMedicines = activeMedicinesRepository.findByUserId(id);
+        List<ActiveMedicines> activeMedicines = activeMedicinesRepository.findByUserId(userId);
         List<ActiveMedicines> todaysMedicines = new ArrayList<ActiveMedicines>();
 
         LocalDate now = LocalDate.now(); // yyyy-mm-dd
@@ -77,8 +77,4 @@ public class ActiveMedicinesService {
         }
         return todaysMedicines;
     }
-
-//    public void updateActiveMedicineInstance(Long id) {
-//
-//    }
 }

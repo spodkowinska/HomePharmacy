@@ -19,10 +19,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User findById(int id){
-        return userRepository.getOne(Long.valueOf(id));
+    public User findById(String id){
+        return userRepository.findById(id).orElse(null);
     }
-    public void deleteById(int id){
-        userRepository.deleteById(Long.valueOf(id));
-    }
+//    public void deleteById(int id){
+//        userRepository.deleteById(Long.valueOf(id));
+//    }
 }

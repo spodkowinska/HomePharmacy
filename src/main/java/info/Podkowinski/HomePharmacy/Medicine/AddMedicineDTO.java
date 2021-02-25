@@ -19,9 +19,11 @@ public class AddMedicineDTO {
 
     private Double officialPrice;
 
+    private String userId;
+
     private String notes;
 
-    public AddMedicineDTO(int id, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice, String notes) {
+    public AddMedicineDTO(int id, String name, String userId, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice, String notes) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -31,7 +33,9 @@ public class AddMedicineDTO {
         this.isVitamin = isVitamin;
         this.isToBuy = isToBuy;
         this.officialPrice = officialPrice;
+        this.userId = userId;
         this.notes = notes;
+
     }
 
     public int getId() {
@@ -48,6 +52,14 @@ public class AddMedicineDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId() {
+        this.userId = userId;
     }
 
     public String getDescription() {
@@ -71,7 +83,7 @@ public class AddMedicineDTO {
     }
 
     public void setIsSteroid(boolean isSteroid) {
-        isSteroid = isSteroid;
+        this.isSteroid = isSteroid;
     }
 
     public boolean getIsAntibiotic() {
@@ -87,15 +99,15 @@ public class AddMedicineDTO {
     }
 
     public void setIsVitamin(boolean isVitamin) {
-        isVitamin = isVitamin;
+        this.isVitamin = isVitamin;
     }
 
     public boolean getIsToBuy() {
         return isToBuy;
     }
 
-    public void setIsToBuy(boolean toBuy) {
-        isToBuy = toBuy;
+    public void setIsToBuy(boolean isToBuy) {
+        this.isToBuy = isToBuy;
     }
 
     public Double getOfficialPrice() {

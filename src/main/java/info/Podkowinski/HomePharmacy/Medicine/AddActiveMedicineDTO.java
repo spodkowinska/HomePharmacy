@@ -28,11 +28,13 @@ public class AddActiveMedicineDTO {
 
     private boolean allTakenOnTime;
 
+    private String userId;
+
 
     public AddActiveMedicineDTO(Integer id, Long medicineInstanceId, MedicineInstance medicineInstance,
                                 Long familyMemberId, LocalDate eatAtDate,
                                 Integer quantityPerDay, Integer howOften, Integer alreadyTaken,
-                                boolean hidden, boolean allTakenOnTime) {
+                                boolean hidden, boolean allTakenOnTime, String userId) {
         this.id = id;
         this.medicineInstanceId = medicineInstanceId;
         this.medicineInstance = medicineInstance;
@@ -43,6 +45,7 @@ public class AddActiveMedicineDTO {
         this.alreadyTaken = alreadyTaken;
         this.hidden = hidden;
         this.allTakenOnTime = allTakenOnTime;
+        this.userId = userId;
     }
 
     // getters and setters
@@ -110,4 +113,12 @@ public class AddActiveMedicineDTO {
     public boolean isAllTakenOnTime() { return allTakenOnTime; }
 
     public void setAllTakenOnTime(boolean allTakenOnTime) { this.allTakenOnTime = allTakenOnTime; }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 }

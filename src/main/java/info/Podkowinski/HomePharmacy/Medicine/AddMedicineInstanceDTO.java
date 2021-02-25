@@ -17,6 +17,8 @@ public class AddMedicineInstanceDTO {
 
     private boolean visible = true;
 
+    private String userId;
+
 
     public AddMedicineInstanceDTO(int id, Long medicine_id, Integer quantityLeft, Date expiryDate, Double price, boolean visible) {
         this.id = id;
@@ -31,6 +33,10 @@ public class AddMedicineInstanceDTO {
     }
 
     //getters and setters
+
+    public String getUserId() {
+        return userId;
+    }
 
     public int getId() {
         return id;

@@ -41,15 +41,15 @@ public class Medicine {
 
     private Double officialPrice;
 
-    private String userId;
+//    private String userId;
 
 //    @ManyToOne(optional = false)
-//    @ManyToOne
-//    private User user;
+    @ManyToOne
+    private User user;
 
     @OneToMany
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
-    private List <MedicineAlternative> alternatives;
+    List <MedicineAlternative> alternatives;
 
     // getters and setters
 
@@ -61,9 +61,9 @@ public class Medicine {
         this.id = id;
     }
 
-    public String getUserId() { return userId; }
-
-    public void setUserId(String userId) { this.userId = userId; }
+//    public String getUserId() { return userId; }
+//
+//    public void setUserId(String userId) { this.userId = userId; }
 
     public String getName() {
         return name;
@@ -109,6 +109,13 @@ public class Medicine {
         isAntibiotic = antibiotic;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
 
     public boolean getIsToBuy() {
         return isToBuy;
