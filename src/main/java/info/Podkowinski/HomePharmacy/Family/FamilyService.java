@@ -19,6 +19,8 @@ public class FamilyService {
         familyRepository.save(familyMember);
     }
 
+    public List<FamilyMember> findAllFamilyMembersByUserId(String userId) { return familyRepository.findAllByUserId(userId); }
+
     public List<FamilyMember> findAll() { return familyRepository.findAll(); }
 
     public FamilyMember findById(long id) { return familyRepository.getOne(id); }

@@ -126,6 +126,7 @@ public class MedicineController {
             newDTO.setVitamin(medicine.getIsVitamin());
             newDTO.setIsToBuy(medicine.getIsToBuy());
             newDTO.setNotes(medicine.getNotes());
+            newDTO.setUser(medicine.getUser());
 
             List<FamilyMember>familyMembers = new ArrayList<>();
 
@@ -140,6 +141,8 @@ public class MedicineController {
                 alternatives.addAll(medicineService.findAlternativesByMedicine(medicine.getId()));
                 newDTO.setAlternatives(alternatives);
             }
+
+            newDTO.setMedicineInstances(medicineService.getInstancesByMedicine(medicine.getId()));
 
             fullMedicine.add(newDTO);
         }
@@ -323,8 +326,9 @@ public class MedicineController {
     @PatchMapping("/updateActiveMedicineInstance")
     public ResponseEntity updateActiveMedicineInstance(@RequestBody AddActiveMedicineDTO updateMedicineInstance, @RequestHeader String userId) {
 
-        MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstanceId()));
-        ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(medicineInstanceToUpdate.getId());
+        MedicineInstance medicineInstanceToUpdate = medicineService.findMedicineInstanceById(Math.toIntExact(updateMedicineInstance.getMedicineInstance().getId()));
+        System.out.println(medicineInstanceToUpdate.getId());
+        ActiveMedicines updatedActiveMedicine = activeMedicinesService.findActiveMedicine(Long.valueOf(updateMedicineInstance.getId()));
         if (medicineInstanceToUpdate.getMedicine().getUser().getId().equals(userId)) {
             medicineInstanceToUpdate.setQuantityLeft(medicineInstanceToUpdate.getQuantityLeft() - 1);
             updatedActiveMedicine.setAlreadyTaken(updatedActiveMedicine.getAlreadyTaken() + 1);

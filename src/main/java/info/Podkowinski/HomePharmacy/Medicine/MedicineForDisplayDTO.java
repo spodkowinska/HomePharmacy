@@ -1,6 +1,7 @@
 package info.Podkowinski.HomePharmacy.Medicine;
 
 import info.Podkowinski.HomePharmacy.Family.FamilyMember;
+import info.Podkowinski.HomePharmacy.User.User;
 
 import java.util.List;
 
@@ -8,6 +9,8 @@ public class MedicineForDisplayDTO {
 
     public MedicineForDisplayDTO() {
     }
+
+    private User user;
 
     private Long id;
 
@@ -31,10 +34,13 @@ public class MedicineForDisplayDTO {
 
     private List<MedicineAlternative> alternatives;
 
+    private List<MedicineInstance> medicineInstances;
+
     private String notes;
 
-    public MedicineForDisplayDTO(Long id, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice, List<FamilyMember> familyMembers, List<MedicineAlternative> alternatives, String notes) {
+    public MedicineForDisplayDTO(Long id, User user, String name, String description, boolean isPrescriptionNeeded, boolean isSteroid, boolean isAntibiotic, boolean isVitamin, boolean isToBuy, Double officialPrice, List<FamilyMember> familyMembers, List<MedicineAlternative> alternatives, String notes, List<MedicineInstance> medicineInstances) {
         this.id = id;
+        this.user = user;
         this.name = name;
         this.description = description;
         this.isPrescriptionNeeded = isPrescriptionNeeded;
@@ -46,6 +52,7 @@ public class MedicineForDisplayDTO {
         this.familyMembers = familyMembers;
         this.alternatives = alternatives;
         this.notes = notes;
+        this.medicineInstances = medicineInstances;
     }
 
 
@@ -57,6 +64,14 @@ public class MedicineForDisplayDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getName() {
@@ -142,4 +157,8 @@ public class MedicineForDisplayDTO {
     public String getNotes() { return notes; }
 
     public void setNotes(String notes) { this.notes = notes; }
+
+    public List<MedicineInstance> getMedicineInstances() { return medicineInstances; }
+
+    public void setMedicineInstances(List<MedicineInstance> medicineInstances) { this.medicineInstances = medicineInstances; }
 }
