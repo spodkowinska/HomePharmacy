@@ -55,10 +55,6 @@ public class FamilyController {
             editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
         }
 
-        editedFamilyMember.setName(editFamilyMemberDTO.getName());
-        editedFamilyMember.setNotes(editFamilyMemberDTO.getNotes());
-        editedFamilyMember.setAge(editFamilyMemberDTO.getAge());
-
         //todo - if user is conected with medicine and you add the same medicine it will add new row in table
 
         if (editFamilyMemberDTO.getMedicineIds() != null) {
