@@ -51,6 +51,9 @@ public class Medicine {
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     List <MedicineAlternative> alternatives;
 
+    @OneToMany
+    List <MedicineInstance> medicineInstances;
+
     // getters and setters
 
     public Long getId() {
@@ -64,6 +67,15 @@ public class Medicine {
 //    public String getUserId() { return userId; }
 //
 //    public void setUserId(String userId) { this.userId = userId; }
+
+
+    public List<MedicineInstance> getMedicineInstances() {
+        return medicineInstances;
+    }
+
+    public void setMedicineInstances(List<MedicineInstance> medicineInstances) {
+        this.medicineInstances = medicineInstances;
+    }
 
     public String getName() {
         return name;

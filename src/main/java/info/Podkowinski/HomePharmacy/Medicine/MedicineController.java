@@ -126,6 +126,7 @@ public class MedicineController {
             newDTO.setVitamin(medicine.getIsVitamin());
             newDTO.setIsToBuy(medicine.getIsToBuy());
             newDTO.setNotes(medicine.getNotes());
+            newDTO.setUser(medicine.getUser());
 
             List<FamilyMember>familyMembers = new ArrayList<>();
 
@@ -140,6 +141,8 @@ public class MedicineController {
                 alternatives.addAll(medicineService.findAlternativesByMedicine(medicine.getId()));
                 newDTO.setAlternatives(alternatives);
             }
+
+            newDTO.setMedicineInstances(medicineService.getInstancesByMedicine(medicine.getId()));
 
             fullMedicine.add(newDTO);
         }
